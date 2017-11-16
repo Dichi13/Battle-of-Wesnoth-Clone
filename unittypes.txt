@@ -1,0 +1,26 @@
+jumlahtipe 3
+
+ID00
+Type King
+Health 30
+Attack 5
+MaxMove 3
+AtkType K
+Harga 9999
+
+ID01
+Type Swordsman
+Health 20
+Attack 3
+MaxMove 2
+AtkType M
+Harga 4
+
+ID02
+Type Archer
+Health 20
+Attack 4
+MaxMove 2
+AtkType R
+Harga 5
+.
