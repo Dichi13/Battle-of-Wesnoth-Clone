@@ -4,6 +4,7 @@
 #include "unit.h"
 #include "stdio.h"
 #include "pcolor.h"
+#include "stdlib.h"
 
 #define Nil NULL
 #define InitGold 200
@@ -59,11 +60,22 @@ extern int CurrPlayer;
 
 /* Primitif-primitif Player */
 
+addressUnit AlokUnit(Unit U);
+/* Alokasi unit U */
+void DealokUnit(Unit U);
+/* Dealokasi U */
+boolean IsEmptyUnit(Player P);
+/* Mengirimkan True jika Player P tidak memiliki unit apapun */
 void CreatePlayer(Player *P);
 /* Membuat player*/
-
 void PrintUnitPlayer(Player P);
 /* Mencetak unit yang dimiliki player */
+void AddUnit(Player *P, UnitList U);
+/* Menambah Unit U Player*/
+void DelUnit(Player *P, UnitList U);
+/* Menghapus Unit U dalam List Unit Player */
+void PrintInfoPlayer(Player P);
+/* Mencetak info Player P */
 
 
 
