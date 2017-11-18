@@ -159,33 +159,46 @@ void show_map()
 }
 * */
 
-/*
+
 void show_info()
 {
-  do
-  {
-    printf("Please​ ​enter​ ​cell’s​ ​coordinate​ ​x​ ​y: \n");
-    scanf("%d %d", x,y);
-    printf("\n");
-    if (((x >= 0) && (x < MNBrsEff(M))) && ((y >= 0) && (y < MNKolEff(M))))
-    {
-      printf("==​ ​Cell​ ​Info​ ​==\n");
-      print_jenis_petak(P);
-      printf("Owned by Player %d\n", Owner(P));
-
-      printf("==​ ​Unit​ ​Info​ ​==\n");
-      printf("%s\n", TypeName(U));
-      printf("Health %s | ATK %d | DEF %d ", Health(U), Atk(U), Def(U));
-    }
-    else
-    {
-      printf("Your input doesn't exist, please try again \n", );
-    }
-  }
-  while (!can_be_moved(x,y,M,U));
+	/* KAMUS LOKAL */
+	POINT P;
+	
+	/* ALGORITMA */
+	do{
+		printf("Please​ ​enter​ ​cell’s​ ​coordinate​ ​x​ ​y: ");
+		BacaPOINT(&P);
+		if (IsIdxEff((Peta(M)), Absis(P), Ordinat(P))){
+			printf("==​ ​Plot​ ​Info​ ​==\n");
+			printf("Plot type of ");
+			PrintPlotType(P);
+			printf("\n");
+			if (Owner(Petak(M, P)) != 0){
+				printf("Owned by Player %d\n", Owner(Petak(M, P)));
+			}
+			else{
+				printf("Plot not owned by any player\n");
+			}
+			printf("==​ ​Unit​ ​Info​ ​==\n");
+			if (PlotUnit(Petak(M, P)) != Nil){
+				printf("%s\n", TypeName(*PlotUnit(Petak(M, P))));
+				printf("Health %d | ATK %d", Health(*PlotUnit(Petak(M, P))), Atk(*PlotUnit(Petak(M, P))));
+			}
+			else{
+				printf("There is no unit inside this plot\n");
+			}
+		}
+		else{
+			printf("Invalid plot\n");
+		}
+	} while (!(IsIdxEff((Peta(M)), Absis(P), Ordinat(P))));
 }
+
+/*
 void end_turn();
 void save();
 
 void next_unit();
 */
+

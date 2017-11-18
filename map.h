@@ -9,6 +9,7 @@
 #include "point.h"
 #include "plot.h"
 #include "unit.h"
+#include <stdio.h>
 
 
 #define Nil NULL
@@ -72,5 +73,13 @@ void InitMap(int NB, int NK);
 /* Terinisiasi Tower dan Castle setiap pemain tanpa King */
 /* Terbentuk Village secara random */
 
+void PrintPlotType(POINT P);
+/* Map M terdefinisi */
+/* Mencetak jenis plot/petak pada koordinat P di Map M */
+/* Tercetak :
+ * "Castle" untuk type 'C'
+ * "Tower" untuk type 'T'
+ * "Village" untuk type 'V'
+ * "Normal plot" untuk type 'N' */
 
 #endif

@@ -7,6 +7,7 @@
 #include "plot.h"
 #include "unit.h"
 #include "map.h"
+#include <stdio.h>
 
 /* Primitif Map */
 
@@ -143,4 +144,29 @@ void InitMap(int X, int Y)
 /* F.S. Terbentuk Map yang telah terinisiasi semua petaknya */
 /* Terinisiasi Tower dan Castle setiap pemain dengan King */
 /* Terbentuk Village secara random */
+
+void PrintPlotType(POINT P)
+{
+	if(PlotType(Petak(M, P)) == 'C'){
+		printf("Castle");
+	}
+	if(PlotType(Petak(M, P)) == 'T'){
+		printf("Tower");
+	}
+	if(PlotType(Petak(M, P)) == 'V'){
+		printf("Village");
+	}
+	if(PlotType(Petak(M, P)) == 'N'){
+		printf("Normal plot");
+	}
+	
+	
+}
+/* Map M terdefinisi */
+/* Mencetak jenis plot/petak pada koordinat P di Map M */
+/* Tercetak :
+ * "Castle" untuk type 'C'
+ * "Tower" untuk type 'T'
+ * "Village" untuk type 'V'
+ * "Normal plot" untuk type 'N' */
 
