@@ -1,4 +1,4 @@
-jumlahtipe 3
+jumlahtipe 4
 
 ID00
 Type King
@@ -23,4 +23,12 @@ Attack 4
 MaxMove 2
 AtkType R
 Harga 5
+
+ID03
+Type White_Mage
+Health 15
+Attack 2
+MaxMove 2
+AtkType M
+Harga 6
 .

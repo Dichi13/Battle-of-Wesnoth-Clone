@@ -8,6 +8,7 @@ UnitType *TypeList;
 int NbUnitType;
 
 int KataInt(Kata kat) {
+/* mengubah Kata menjadi integer */
 	int res = 0, i = 1;
 	while (i <= kat.Length) {
 		res *= 10;
@@ -20,6 +21,7 @@ int KataInt(Kata kat) {
 }
 
 char *KataStr(Kata kat) {
+/* mengubah Kata menjadi string */
 	char *temp;
 	int i;
 	
@@ -34,21 +36,13 @@ char *KataStr(Kata kat) {
 void InitUnitTypeList() {
 	int i = 0;
 	STARTKATA("unittypes.txt");
-	//~ printf("cek: %c %d %d\n", CKata.TabKata[1], atoi(CKata.TabKata), CKata.Length);
 	ADVKATA();
-	//~ printf("cek: %c %d %d\n", CKata.TabKata[1], atoi(CKata.TabKata), CKata.Length);
-	//~ printf("isi CKata: %c\n", CKata.TabKata[1]);
 	NbUnitType = KataInt(CKata);
 	TypeList = (UnitType *) malloc(NbUnitType*sizeof(UnitType));
-	//~ printf("test 2\n");
 	ADVKATA();
-	//~ printf("cek: %s %d %d\n", CKata.TabKata, NbUnitType, CKata.Length);
-	//~ printf("test 2b: %d  %d\n",NbUnitType, EndKata);
 	while (!EndKata) {
 		ADVKATA(); ADVKATA();
-		printf("test1\n");
 		TypeList[i].TypeName = KataStr(CKata);
-		printf("test2 %s\n", TypeList[i].TypeName);
 		
 		ADVKATA(); ADVKATA();
 		TypeList[i].MaxHP = KataInt(CKata);
@@ -87,6 +81,7 @@ Unit CreateUnit(int IdxList, int X, int Y) {
 }
 /* Membuat unit baru dengan tipe unit yang terdapat pada TypeList[IdxList] */
 /* Unit yang baru dibuat tidak dapat bergerak dan tidak bisa menyerang */
+/* Catatan: IdxList harus sesuai dengan ID unit di unittypes.txt */
 
 void MoveUnit(Unit *U, int dx, int dy){
 	Geser(&Position(*U), dx, dy);
@@ -102,7 +97,7 @@ boolean IsAdjacent(Unit U1, Unit U2) {
 void Attack(Unit *U1, Unit *U2) {
 	Health(*U2) -= Atk(*U1);
 	if (Health(*U2) > 0) {
-		if (AtkType(*U1) == AtkType(*U2) || AtkType(*U2) == 'K') {
+		if (AtkType(*U1) == AtkType(*U2) || AtkType(*U2) == 'K' || (AtkType(*U1) == 'K' && AtkType(*U2) == 'M')) {
 			Health(*U1) -= Atk(*U2);
 		} 
 	}
