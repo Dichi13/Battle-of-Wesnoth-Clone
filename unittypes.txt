@@ -1,4 +1,4 @@
-jumlahtipe 4
+jumlah_tipe 4
 
 ID00
 Type King
