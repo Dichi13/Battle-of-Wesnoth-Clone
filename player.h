@@ -40,7 +40,7 @@ typedef struct {
 	addressPoint FirstVil;
 } VillageList;
 
-extern Player *CurrPlayer;
+extern Player *currPlayer;
 
 /* Selektor-selektro List Unit */
 #define InfoUnit(U) (U)->infoU      //U = addressUnit (Pointer ke tipe ElmtUnitList)
