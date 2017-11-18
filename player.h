@@ -11,6 +11,28 @@
 #define IncomePerVillage 10
 #define UpkeepPerUnit 3
 
+typedef Unit infounit;
+typedef struct LUnit *addressUnit;
+typedef struct LUnit {
+	infounit infoU;
+	addressUnit nextU;
+} ElmtUnitList;
+
+typedef POINT infopoint;
+typedef struct LPoint* addressPoint;
+typedef struct LPoint {
+	infopoint infoV;
+	addressPoint nextV;
+} ElmtVillageList;
+
+typedef struct {
+	addressUnit FirstUnit;
+} UnitList;
+
+typedef struct {
+	addressPoint FirstVil;
+} VillageList;
+
 typedef struct tPlayer{
 	int PlayerNo;
 	int Gold;
@@ -19,26 +41,6 @@ typedef struct tPlayer{
 	int Income;
 	int Upkeep;
 } Player;
-
-typedef Unit infounit;
-typedef struct LUnit *addressUnit;
-typedef struct LUnit {
-	infounit infoU;
-	addressUnit nextU;
-} ElmtUnitList;
-typedef struct {
-	addressUnit FirstUnit;
-} UnitList;
-
-typedef POINT infopoint;
-typedef struct LPoint* addressPoint;
-typedef struct LPoint {
-	infopoint infoV;
-	addressPoint nextV;
-} ElmtVillageList;
-typedef struct {
-	addressPoint FirstVil;
-} VillageList;
 
 extern Player *currPlayer;
 

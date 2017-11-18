@@ -9,7 +9,9 @@
 #include "player.h"
 
 extern Unit* SelectedUnit;
+extern int CurrPlayer;
 
+/*
 void command()
 {
   char command[14];
@@ -23,6 +25,7 @@ void command()
   }
   while (strcmp(command,"EXIT") != 0);
 }
+*/
 
 boolean IsMoveValid(POINT dest, Unit U)
 {
@@ -66,59 +69,97 @@ void Move(Unit U)
   }
 }
 
-boolean can_call_recruit_comm() {
-	boolean temp, adakosong;
-	POINT P = Position(*SelectedUnit);
-	temp = strcmp(TypeName(*SelectedUnit),"King") == 0 && PlotType(Petak(M, P)) == 'T';
-	adakosong = false;
-	Geser(&P, 0, 1);
-	adakosong ||= IsPlotEmpty(M,P);
-	Geser(&P, 0, -2);
-	adakosong ||= IsPlotEmpty(M,P);
-	Geser(&P, 1, 1);
-	adakosong ||= IsPlotEmpty(M,P);
-	Geser(&P, -2, 0);
-	adakosong ||= IsPlotEmpty(M,P);
-
-	return temp && adakosong;
+boolean IsCastleFull()
+{
+	/* KAMUS LOKAL */
+	boolean Full;
+	POINT C1, C2, C3, C4;
+	
+	/* ALGORITMA */
+	if(CurrPlayer == 1){
+	/* Inisiasi untuk Player 1 */
+		C1 = MakePOINT(GetLastIdxBrs(Peta(M)), GetFirstIdxKol(Peta(M))+1);
+		C2 = MakePOINT(GetLastIdxBrs(Peta(M))-1, GetFirstIdxKol(Peta(M)));
+		C3 = MakePOINT(GetLastIdxBrs(Peta(M))-1, GetFirstIdxKol(Peta(M)));
+		C4 = MakePOINT(GetLastIdxBrs(Peta(M))-2, GetFirstIdxKol(Peta(M))+1);
+	}
+	if(CurrPlayer == 2){
+	/* Inisiasi untuk Player 2 */
+		C1 = MakePOINT(GetFirstIdxBrs(Peta(M)), GetLastIdxKol(Peta(M))-1);
+		C2 = MakePOINT(GetFirstIdxBrs(Peta(M))+1, GetLastIdxKol(Peta(M)));
+		C3 = MakePOINT(GetFirstIdxBrs(Peta(M))+1, GetLastIdxKol(Peta(M))-2);
+		C4 = MakePOINT(GetFirstIdxBrs(Peta(M))+2, GetLastIdxKol(Peta(M))-1);
+	}
+	
+	Full = ((PlotUnit(Petak(M, C1)) != Nil) && (PlotUnit(Petak(M, C2)) != Nil) && (PlotUnit(Petak(M, C3)) != Nil) && (PlotUnit(Petak(M, C4)) != Nil));
+	
+	return Full;	
 }
 
-void recruit()   // asumsi: ada global variabel Unit* SelectedUnit dan Player* currPlayer, ada primitif AddUnit di ADT player
+
+void recruit()
 {
-  if (can_call_recruit_comm())
-  {
-	POINT P;
+	/* KAMUS LOKAL */
+	POINT dest;
+	boolean valid;
 	int i;
 	
-	do {
-		printf("Enter the coordinate for recruitment : ");
-		scanf("%d %d", &Absis(P), &Ordinat(P));
-		if (!(IsPlotEmpty(M, P) && PlotType(Petak(M,P)) == 'C')) {
-			printf("That castle is occupied!\n");
+	/* ALGORITMA */
+	if (strcmp(TypeName(*SelectedUnit),"King") == 0){
+		if(PlotType(Petak(M, Position(*SelectedUnit))) == 'T'){
+			if(!IsCastleFull()){
+				do{
+					printf("Enter coordinate of empty castle : ");
+					BacaPOINT(&dest);
+					valid = true;
+					if(PlotType(Petak(M, dest)) != 'C'){
+						valid = false;
+						printf("Selected coordinate is not a castle!\n");
+					}
+					else{
+						if(Owner(Petak(M, dest)) != CurrPlayer){
+							valid = false;
+							printf("That is not your castle!\n");
+						}
+					}
+				} while (!valid);
+				printf("========== List of recruitable units ==========\n");
+				for (i = 1; i<NbUnitType; i++) {
+					printf("%d. %s | Health %d | ATK %d | Cost %dG\n", i, TypeList[i].TypeName, TypeList[i].MaxHP, TypeList[i].Atk, TypeList[i].Cost);
+				}
+				printf("Enter the index of the unit you want to recruit :");
+				scanf("%d", &i);
+				if (Gold(*currPlayer) >= TypeList[i].Cost) {
+					Gold(*currPlayer) -= TypeList[i].Cost;
+					AddUnit(currPlayer, CreateUnit(i, Absis(dest), Ordinat(dest)));
+				} else {
+					printf("You don't have enough gold to recruit that unit!\n");
+				}
+				
+			}
+			else{
+				printf("All castles are full");
+			}
 		}
-	}while (!(IsPlotEmpty(M, P) && PlotType(Petak(M,P)) == 'C'));
-	printf("========== List of recruitable units ==========\n");
-	for (i = 1; i<NbUnitType; i++) {
-		printf("%d. %s | Health %d | ATK %d | Cost %dG\n", i, TypeList[i].TypeName, TypeList[i].MaxHP, TypeList[i].Atk, TypeList[i].Cost);
+		else{
+			printf("The King is not in the Tower\n");
+		} 
 	}
-	printf("Enter the index of the unit you want to recruit :");
-	scanf("%d", &i);
-	if (Gold(*currPlayer) >= TypeList[i].Cost) {
-		Gold(*currPlayer) -= TypeList[i].Cost;
-		AddUnit(CreateUnit(i, Absis(P), Ordinat(P)), *currPlayer);
-	} else {
-		printf("You don't have enough gold to recruit that unit!\n");
+	else{
+		printf("You have to select The King to recruit\n");
 	}
-	
-  } else {
-	  printf("Only King on a Tower plot with at least one adjacent empty castle can recruit more units!\n");
-  }
 }
+
 void attack();
+
+/*
 void show_map()
 {
   PrintMap();
 }
+* */
+
+/*
 void show_info()
 {
   do
@@ -147,22 +188,4 @@ void end_turn();
 void save();
 
 void next_unit();
-
-/* BANTUAN */
-boolean can_be_moved(int x, int y, MATRIKS M, Unit U)
-{
-  int dx = x - Absis(Position(U));
-  int dy = y - Ordinat(Position(U));
-  if ((x >= 0) && (x < MNBrsEff(M))) && ((y >= 0) && (y < MNKolEff(M))) && (dx + dy <= MovePoint(U))
-  {
-    if ()
-    {
-      /* cek enemy */
-    }
-  }
-}
-
-print_jenis_petak(Plot P)
-{
-
-}
+*/
