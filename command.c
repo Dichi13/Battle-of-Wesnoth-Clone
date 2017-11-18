@@ -1,8 +1,14 @@
 /* Command */
 
 #include "command.h"
+#include "unit.h"
+#include "map.h"
+#include <stdio.h>
+#include "point.h"
+#include "stackMove.h"
+#include "player.h"
 
-boolean can_be_moved(int x, int y, MATRIKS M, Unit U);
+extern Unit* SelectedUnit;
 
 void command()
 {
@@ -18,33 +24,47 @@ void command()
   while (strcmp(command,"EXIT") != 0);
 }
 
-void move(Unit U)
+boolean IsMoveValid(POINT dest, Unit U)
 {
-  int x,y,dx,dy;
+  /* KAMUS LOKAL */
+  int dx, dy;
+  POINT current;
+  boolean valid;
+  
+  /* ALGORITMA */
+  current = Position(U);
+  dx = Absis(current) - Absis(dest);
+  dy = Ordinat(current) - Ordinat(dest);
+  valid = ((dx + dy) <= MovePoint(U));
+  
+  if (valid) {
+	  if(PlotUnit(Petak(M, dest)) != Nil){
+		  valid = false;
+	  }
+  }
+  
+  return valid;
+}
 
-  do
+void Move(Unit U)
+{
+  POINT dest;
+
   {
-    printf("Please​ ​enter​ ​cell’s​ ​coordinate​ ​x​ ​y: \n");
-    scanf("%d %d", x,y);
+    printf("Please​ ​enter​ ​destination​ ​coordinate​ ​x​ ​y (example : 1 1 ) : \n");
+    BacaPOINT(&dest);
     printf("\n");
     /* geser sejauh dx,dy */
-    dx = x - Absis(Position(U));
-    dy = y - Ordinat(Position(U));
-    if (can_be_moved(x,y,M,U))
-    {
-      Push(&S,Position(U));
-      MoveUnit(&U,dx,dy);
+    if (IsMoveValid(dest, U)){
+		Push(CreateUnitMove(Position(U), &U));
+		Position(U) = dest;
     }
     else
     {
-      printf("You can't move there\n", );
+      printf("You can't move there\n");
     }
   }
-  while (!can_be_moved(x,y,M,U));
 }
-
-void undo() /* adam fadhel */
-void change_unit()
 
 boolean can_call_recruit_comm() {
 	boolean temp, adakosong;
@@ -85,7 +105,7 @@ void recruit()   // asumsi: ada global variabel Unit* SelectedUnit dan Player* c
 	scanf("%d", &i);
 	if (Gold(*currPlayer) >= TypeList[i].Cost) {
 		Gold(*currPlayer) -= TypeList[i].Cost;
-		AddUnit(currPlayer, CreateUnit(i, Absis(P), Ordinat(P)));
+		AddUnit(CreateUnit(i, Absis(P), Ordinat(P)), *currPlayer);
 	} else {
 		printf("You don't have enough gold to recruit that unit!\n");
 	}
