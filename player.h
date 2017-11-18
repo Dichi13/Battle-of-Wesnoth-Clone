@@ -14,14 +14,14 @@
 typedef struct tPlayer{
 	int PlayerNo;
 	int Gold;
-	UnitList *UnitP;
-	VillageList *Village;
+	UnitList UnitP;
+	VillageList Village;
 	int Income;
 	int Upkeep;
 } Player;
 
 typedef Unit infounit;
-typedef struct LUnit *addressUnit
+typedef struct LUnit *addressUnit;
 typedef struct LUnit {
 	infounit infoU;
 	addressUnit nextU;
@@ -31,7 +31,7 @@ typedef struct {
 } UnitList;
 
 typedef POINT infopoint;
-typedef struct LPoint *addressPoint
+typedef struct LPoint* addressPoint;
 typedef struct LPoint {
 	infopoint infoV;
 	addressPoint nextV;
@@ -40,15 +40,15 @@ typedef struct {
 	addressPoint FirstVil;
 } VillageList;
 
-extern int CurrPlayer;
+extern Player *CurrPlayer;
 
 /* Selektor-selektro List Unit */
-#define InfoUnit(U) (U)->infoU
-#define NextUnit(U)	(U)->nextU
-#define FirstUnit(U) ((U).FirstUnit)
-#define InfoVil(V)	(V)->infoV
-#define NextVil(V)	(V)->nextV
-#define FirstVillage(V) ((V).FirstVillage)
+#define InfoUnit(U) (U)->infoU      //U = addressUnit (Pointer ke tipe ElmtUnitList)
+#define NextUnit(U)	(U)->nextU		//U = addressUnit
+#define FirstUnit(L) ((L).FirstUnit)//L = UnitList
+#define InfoVil(V)	(V)->infoV			// V = addressPoint (Pointer ke tipe ElmtVillageList)
+#define NextVil(V)	(V)->nextV			// V = addressPoint
+#define FirstVillage(L) ((L).FirstVillage) //L = VillageList
 
 /* Selektor-selektor Player*/
 #define PlayerNo(P) (P).PlayerNo
@@ -70,10 +70,10 @@ void CreatePlayer(Player *P);
 /* Membuat player*/
 void PrintUnitPlayer(Player P);
 /* Mencetak unit yang dimiliki player */
-void AddUnit(Player *P, UnitList U);
-/* Menambah Unit U Player*/
-void DelUnit(Player *P, UnitList U);
-/* Menghapus Unit U dalam List Unit Player */
+void AddUnit(Player *P, Unit U);
+/* Menambah Unit U ke dalam UnitList Player*/
+void DelUnit(Player *P, Unit *U);
+/* Menghapus Unit U dari dalam List Unit Player */
 void PrintInfoPlayer(Player P);
 /* Mencetak info Player P */
 

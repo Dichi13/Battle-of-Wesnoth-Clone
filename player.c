@@ -1,6 +1,9 @@
 #include "player.h"
 #include "stdlib.h"
 
+/* Deklarasi variabel global */
+Player *currPlayer;
+
 /* Primitif-primitif Player */
 
 void CreatePlayer(Player *P) {
@@ -39,15 +42,15 @@ void AddUnit(Player *P, Unit X) {
 	FirstUnit(ListUnit(*P)) = U;
 }
 
-void DelUnit(Player *P, Unit U) {
+void DelUnit(Player *P, Unit *U) {
 	addressUnit AddrU,PrecAddrU,temp;
 	boolean bFound = false;
 	if (!IsEmptyUnit(ListUnit(*P))) {
 		AddrU = FirstUnit(ListUnit(*P));
 		PrecAddrU = Nil;
-		if (NextUnit(AddrU) != Nil) && (AddrU != U) {
+		if (NextUnit(AddrU) != Nil) && (&InfoUnit(AddrU) != U) { //jika U tidak di elemen pertama
 			while ((AddrU != Nil) && (!bFound)) {
-				if (AddrU == U) {
+				if (&InfoUnit(AddrU) == U) {
 					bFound = true;
 				} else {
 					PrecAddrU = AddrU;
@@ -59,7 +62,7 @@ void DelUnit(Player *P, Unit U) {
 				Dealokasi(AddrU);
 			}
 		} else {
-			if (AddrU == U) {
+			if (&InfoUnit(AddrU) == U) {  // jika U ditemukan di elemen pertama
 				temp = FirstUnit(ListUnit(*P));
 				FirstUnit(ListUnit(*P)) = Next(temp);
 				Dealokasi(temp);

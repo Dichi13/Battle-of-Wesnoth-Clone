@@ -85,7 +85,7 @@ void recruit()   // asumsi: ada global variabel Unit* SelectedUnit dan Player* c
 	scanf("%d", &i);
 	if (Gold(*currPlayer) >= TypeList[i].Cost) {
 		Gold(*currPlayer) -= TypeList[i].Cost;
-		AddUnit(CreateUnit(i, Absis(P), Ordinat(P)), *currPlayer);
+		AddUnit(currPlayer, CreateUnit(i, Absis(P), Ordinat(P)));
 	} else {
 		printf("You don't have enough gold to recruit that unit!\n");
 	}
