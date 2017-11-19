@@ -21,6 +21,7 @@ typedef struct Utype{
 
 typedef struct tUnit{
 	int TypeIdx;
+	int Owner;
 	int Health;
 	int Move;
 	boolean Action;
@@ -41,6 +42,7 @@ extern int NbUnitType;
 
 /* selektor variabel unit */ 
 #define TypeID(U) (U).TypeIdx
+#define OwnerUnit(U) (U).Owner
 #define Health(U) (U).Health
 #define MovePoint(U) (U).Move
 #define CanAtk(U) (U).Action
@@ -53,7 +55,7 @@ void InitUnitTypeList();
 /* I.S. TypeList sembarang, terdapat file "unittype.txt" di folder yang sama */
 /* F.S. TypeList terdefinisi dan terisi dengan tipe-tipe unit yang digunakan dalam game */ 
 
-Unit CreateUnit(int IdxList, int X, int Y);
+Unit CreateUnit(int IdxList, int X, int Y, int ownerNo);
 /* Membuat unit baru dengan tipe unit yang terdapat pada TypeList[IdxList] */
 /* Unit yang baru dibuat tidak dapat bergerak dan tidak bisa menyerang */
 

@@ -66,11 +66,11 @@ void InitUnitTypeList() {
 /* I.S. TypeList sembarang, terdapat file "unittypes.txt" di folder yang sama, dengan format isi file yang valid */
 /* F.S. TypeList terdefinisi dan terisi dengan tipe-tipe unit yang digunakan dalam game */ 
 
-Unit CreateUnit(int IdxList, int X, int Y) {
+Unit CreateUnit(int IdxList, int X, int Y, int ownerNo) {
 	Unit temp;
 	POINT P;
-	
 	TypeID(temp) = IdxList;
+	OwnerUnit(temp) = ownerNo;
 	Health(temp) =  TypeList[IdxList].MaxHP;
 	MovePoint(temp) = 0;
 	CanAtk(temp) = false;
