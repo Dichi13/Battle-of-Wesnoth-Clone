@@ -65,6 +65,10 @@ void MoveUnit(Unit *U, int dx, int dy);
 boolean IsAdjacent(Unit U1, Unit U2);
 /* mengembalikan true jika kedua unit berjarak satu petak. */
 
+void UnreadyUnit(Unit U);
+/* I.S. Unit terdefinisi */
+/* F.S. MovePoint unit menjadi 0 dan boolean Actionnya false */
+
 boolean CanRetaliate(Unit U1, Unit U2);
 /* Menghasilkan true jika tipe attack Unit U2 dapat retaliate jika diserang U1 */
 

@@ -11,19 +11,6 @@
 #include "point.h"
 
 /* ************ Prototype ************ */
-/* *** Konstruktor/Kreator *** */
-UnitMove CreateUnitMove (POINT Prev, Unit* U)
-{
-	/* KAMUS LOKAL */
-	UnitMove UM;
-	
-	/* ALGORITMA */
-	MovedUnit(UM) = U;
-	PrevPos(UM) = Prev;
-	
-	return UM;
-}
-
 void CreateEmptyStack ()
 {
 	Top(MoveStack) = NilStack;
@@ -37,7 +24,7 @@ boolean IsEmptyStack ()
 
 boolean IsFullStack ()
 {
-	return (Top(MoveStack) == MaxEl);
+	return (Top(MoveStack) == MaxElStack);
 }
 
 /* ************ Menambahkan sebuah elemen ke Stack ************ */

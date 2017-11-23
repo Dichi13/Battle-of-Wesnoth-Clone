@@ -14,12 +14,7 @@
 /* Nil adalah stack dengan elemen kosong . */
 /* Karena indeks dalam bhs C dimulai 0 maka tabel dg indeks 0 tidak dipakai */
 
-typedef struct tUnitMove{
-	POINT PreviousPosition;
-	Unit* MovedUnit;
-} UnitMove;
-
-typedef UnitMove infostack;
+typedef POINT infostack;
 typedef int address;   /* indeks tabel */
 
 /* Contoh deklarasi variabel bertype stack dengan ciri TOP : */
@@ -37,15 +32,10 @@ typedef struct {
 /* Definisi akses dengan Selektor : Set dan Get */
 #define Top(S) (S).TOP
 #define InfoTop(S) (S).T[(S).TOP]
-#define MovedUnit(UM) (UM).MovedUnit
-#define PrevPos(UM) (UM).PreviousPosition
 
 extern UnitMovementStack MoveStack;
 /* ************ Prototype ************ */
 /* *** Konstruktor/Kreator *** */
-UnitMove CreateUnitMove (POINT Prev, Unit* U);
-/* Menghasilkan tipe data UnitMove dengan PreviousPosisition = Prev dan MovedUnit = U */
-
 void CreateEmptyStack ();
 /* I.S. sembarang; */
 /* F.S. Membuat sebuah stack S yang kosong berkapasitas MaxEl */

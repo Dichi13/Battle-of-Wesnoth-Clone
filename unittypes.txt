@@ -5,7 +5,7 @@ Type King
 Health 30
 Attack 5
 MaxMove 3
-AtkType K
+AtkType M
 Harga 9999
 
 ID01

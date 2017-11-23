@@ -1,6 +1,7 @@
 #include "unit.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "mesinkata.h"
 
 /* Deklarasi variabel global */
 UnitType *TypeList;
@@ -95,10 +96,18 @@ boolean IsAdjacent(Unit U1, Unit U2) {
 
 boolean CanRetaliate(Unit U1, Unit U2)
 {
-	return ((AtkType(U1) == AtkType(U2)) || AtkType(U2) == 'K' || (AtkType(U1) == 'K' && AtkType(U2) == 'M'));
+	return ((AtkType(U1) == AtkType(U2)) || StrSama(TypeName(U2), "King"));
 }
 /* Menghasilkan true jika tipe attack Unit U2 dapat retaliate jika diserang U1 */
 
+void UnreadyUnit(Unit U)
+{
+	MovePoint(U) = 0;
+	CanAtk(U) = false;
+}
+/* I.S. Unit terdefinisi */
+/* F.S. MovePoint unit menjadi 0 dan boolean Actionnya false */
+	
 void AttackUnit(Unit *U1, Unit *U2) {
 	Health(*U2) -= Atk(*U1);
 	if (Health(*U2) > 0) {

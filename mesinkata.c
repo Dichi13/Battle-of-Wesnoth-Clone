@@ -71,3 +71,16 @@ void SalinKata() {
           CC adalah karakter sesudah karakter terakhir yang diakuisisi.
           Jika panjang kata melebihi NMax, maka sisa kata "dipotong" */
 
+boolean StrSama (char *str1, char *str2) {
+	/* Kamus Lokal */
+	int i = 0;
+	boolean sama = true;
+	
+	/* Algoritma */
+	while (str1[i] != '\0' && str2[i] != '\0') {
+		sama = str1[i] == str2[i];
+		i++;
+	}
+	sama = str1[i] == str2[i];
+	return sama;
+}

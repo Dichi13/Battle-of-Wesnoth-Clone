@@ -56,7 +56,7 @@ void HealMage (Player P)
 	L = ListUnit(P);
 	
 	while(L != Nil){
-		if (TypeName(InfoUnit(L)) == ){
+		if (StrSama(TypeName(InfoUnit(L)), "White_Mage")){
 			for(i = 1; i <= 4; i++){
 				U = ChooseAdjacentUnit(InfoUnit(L), i);
 				if ((U != Nil) && OwnerUnit(*U) == PlayerNo(P)){

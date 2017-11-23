@@ -92,7 +92,7 @@ void Move(Unit U)
     printf("\n");
     /* geser sejauh dx,dy */
     if (IsMoveValid(dest, U)){
-		Push(CreateUnitMove(Position(U), &U));
+		Push(Position(U));
 		MovePoint(U) -= abs(Absis(dest)-Absis(Position(U)))+abs(Ordinat(dest)-Ordinat(Position(U)));
 		Position(U) = dest;
 		if((PlotType(Petak(M, dest)) == 'V') && (Owner(Petak(M, dest)) != PlayerNo(*currPlayer))){
@@ -113,18 +113,15 @@ void Move(Unit U)
 void Undo() 
 {
 	/* Kamus Lokal */
-	UnitMove Prev;
 	Unit undoUnit;
-	POINT posawal;
+	POINT PosAwal;
 	int dist;
 	
 	/* Algoritma */
-	Pop(&Prev);
-	undoUnit = *MovedUnit(Prev);
-	posawal = PrevPos(Prev);
-	dist = abs(Absis(Position(undoUnit))-Absis(posawal))+abs(Ordinat(Position(undoUnit))-Ordinat(posawal));
+	Pop(&PosAwal);
+	dist = abs(Absis(Position(undoUnit))-Absis(PosAwal)) + abs(Ordinat(Position(undoUnit))-Ordinat(PosAwal));
 	MovePoint(undoUnit) += dist;
-	Position(undoUnit) = posawal;
+	Position(undoUnit) = PosAwal;
 }
 
 boolean IsCastleFull()
@@ -195,6 +192,7 @@ void recruit()
 					PlotUnit(Petak(M, dest)) = &U;
 					MovePoint(U) = 0;
 					CanAtk(U) = false;
+					UnreadyUnit(*SelectedUnit);
 				} else {
 					printf("You don't have enough gold to recruit that unit!\n");
 				}
@@ -303,12 +301,11 @@ void Attack()
 			printf("Enemy's %s is damaged by %d.", TypeName(*UAd), Atk(*SelectedUnit));
 			if (Health(*UAd) <= 0){
 				printf("Enemy's %s died.", TypeName(*UAd));
+				if (StrSama(TypeName(*UAd), "King")){
+					/* insert victory code here */
+				}
 				SetUnit(Position(*UAd), Nil);
 				DelUnit(SearchPlayer(OwnerUnit(*UAd)), UAd);
-				/*
-				if (UAd == King){
-				* you win
-				* } */
 			}
 			else{
 				if (CanRetaliate(*SelectedUnit, *UAd)){
@@ -319,11 +316,11 @@ void Attack()
 						SetUnit(Position(*SelectedUnit), Nil);
 						DelUnit(currPlayer, SelectedUnit);
 						SelectedUnit = Nil;
-						/*
-						if (SelectedUnit == King){
-						* you lose
-						* } */
+						if (StrSama(TypeName(*SelectedUnit), "King")){
+							/* insert victory code here */
+						}
 					}
+					UnreadyUnit(*SelectedUnit);
 				}
 			}
 		}
