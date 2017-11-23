@@ -12,11 +12,6 @@
 #include <math.h>
 
 
-<<<<<<< HEAD
-=======
-extern Unit* SelectedUnit; // 
-extern int CurrPlayer;    // Ner, gw ubah jadi make yg pointer ya
->>>>>>> 35b1a69d1f426c6b58bf86ef7124b5a166736a79
 
 /*
 void command()
@@ -55,21 +50,13 @@ boolean IsMoveValid(POINT dest, Unit U)
 	  pathclear = true;		//perlu dicek perjalanan ke petak itu dihalangi musuh atau tidak
 	  for(i = 1; i < dx; i++) {
 		  Geser(&current, 1, 0);
-<<<<<<< HEAD
 		  if ((PlotUnit(Petak(M, current))) != Nil) {
-=======
-		  if ((*PlotUnit(Petak(M, current))) != Nil) {
->>>>>>> 35b1a69d1f426c6b58bf86ef7124b5a166736a79
 			  pathclear = pathclear && OwnerUnit(*PlotUnit(Petak(M, current))) == PlayerNo(*currPlayer);
 		  }
 	  }
 	  for(i = 1; i < dy; i++) {
 		  Geser(&current, 0, 1);
-<<<<<<< HEAD
 		  if ((PlotUnit(Petak(M, current))) != Nil) {
-=======
-		  if ((*PlotUnit(Petak(M, current))) != Nil) {
->>>>>>> 35b1a69d1f426c6b58bf86ef7124b5a166736a79
 			  pathclear = pathclear && OwnerUnit(*PlotUnit(Petak(M, current))) == PlayerNo(*currPlayer);
 		  }
 	  }
@@ -78,36 +65,20 @@ boolean IsMoveValid(POINT dest, Unit U)
 		pathclear = true;
 		for(i = 1; i < dy; i++) {
 			Geser(&current, 0, 1);
-<<<<<<< HEAD
 			if ((PlotUnit(Petak(M, current))) != Nil) {
-=======
-			if ((*PlotUnit(Petak(M, current))) != Nil) {
->>>>>>> 35b1a69d1f426c6b58bf86ef7124b5a166736a79
 				pathclear = pathclear && OwnerUnit(*PlotUnit(Petak(M, current))) == PlayerNo(*currPlayer);
 			}
 		}
 		for(i = 1; i < dx; i++) {
 			Geser(&current, 1, 0);
-<<<<<<< HEAD
 			if ((PlotUnit(Petak(M, current))) != Nil) {
-=======
-			if ((*PlotUnit(Petak(M, current))) != Nil) {
->>>>>>> 35b1a69d1f426c6b58bf86ef7124b5a166736a79
 				pathclear = pathclear && OwnerUnit(*PlotUnit(Petak(M, current))) == PlayerNo(*currPlayer);
 			}
 		}
-	  }
-<<<<<<< HEAD
-  
-	}
-  
-	return valid && pathclear;
-=======
-	  
+	  }	  
   }
   
   return valid && pathclear;
->>>>>>> 35b1a69d1f426c6b58bf86ef7124b5a166736a79
 }
 
 void Move(Unit U)
@@ -121,11 +92,7 @@ void Move(Unit U)
     /* geser sejauh dx,dy */
     if (IsMoveValid(dest, U)){
 		Push(CreateUnitMove(Position(U), &U));
-<<<<<<< HEAD
 		MovePoint(U) -= abs(Absis(dest)-Absis(Position(U)))+abs(Ordinat(dest)-Ordinat(Position(U)));
-=======
-		MovePoint(U) -= abs(Absis(dest)-Absis(U))+abs(Ordinat(dest)-Ordinat(U));
->>>>>>> 35b1a69d1f426c6b58bf86ef7124b5a166736a79
 		Position(U) = dest;
 		if((PlotType(Petak(M, dest)) == 'V') && (Owner(Petak(M, dest)) != PlayerNo(*currPlayer))){
 			DelVillage(SearchPlayer(Owner(Petak(M, dest))), &dest);
@@ -154,11 +121,7 @@ void Undo()
 	Pop(&Prev);
 	undoUnit = *MovedUnit(Prev);
 	posawal = PrevPos(Prev);
-<<<<<<< HEAD
 	dist = abs(Absis(Position(undoUnit))-Absis(posawal))+abs(Ordinat(Position(undoUnit))-Ordinat(posawal));
-=======
-	dist = abs(Absis(undoUnit)-Absis(posawal))+abs(Ordinat(undoUnit)-Ordinat(posawal));
->>>>>>> 35b1a69d1f426c6b58bf86ef7124b5a166736a79
 	MovePoint(undoUnit) += dist;
 	Position(undoUnit) = posawal;
 }
@@ -226,13 +189,9 @@ void recruit()
 				scanf("%d", &i);
 				if (Gold(*currPlayer) >= TypeList[i].Cost) {
 					Gold(*currPlayer) -= TypeList[i].Cost;
-<<<<<<< HEAD
 					U = CreateUnit(i, Absis(dest), Ordinat(dest), PlayerNo(*currPlayer));
 					AddUnit(currPlayer, U);
 					PlotUnit(Petak(M, dest)) = &U;
-=======
-					AddUnit(currPlayer, CreateUnit(i, Absis(dest), Ordinat(dest), PlayerNo(currPlayer)));
->>>>>>> 35b1a69d1f426c6b58bf86ef7124b5a166736a79
 				} else {
 					printf("You don't have enough gold to recruit that unit!\n");
 				}
@@ -304,6 +263,9 @@ void ShowAdjacentUnit(Unit U, boolean Enemy)
 		}
 		else{
 			if (IsPlotInMap(M, P1) && !IsPlotEmpty(M, P1)){
+			}
+		}
+	}
 			
 			
 }
