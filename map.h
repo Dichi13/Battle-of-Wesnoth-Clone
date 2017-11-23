@@ -86,4 +86,12 @@ void PrintPlotType(POINT P);
  * "Village" untuk type 'V'
  * "Normal plot" untuk type 'N' */
 
+Unit* ChooseAdjacentUnit(Unit U, int choice);
+/* Mengembalikan pointer unit yang adjacent dari unit U, mengembalikan Nil jika tidak ada */
+/* Mengembalikakn unit adjacent berdasarkan pilihan choice
+ * untuk choice =
+ * 1 : Unit di kiri
+ * 2 : Unit di atas
+ * 3 : Unit di kanan
+ * 4 : Unit di bawah */
 #endif

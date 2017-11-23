@@ -1,6 +1,7 @@
 #include "player.h"
 #include "queue.h"
 #include "turn.h"
+#include "map.h"
 
 extern Queue PlayerTurns;
 /* Player pada head adalah currPlayer */
@@ -22,8 +23,7 @@ void ChangeTurns()
 	
 	L = ListUnit(P);
 	while (L != Nil){
-		CanAtk(InfoUnit(FirstUnit(L))) = true;
-		MovePoint(InfoUnit(FirstUnit(L))) = MaxMove(InfoUnit(FirstUnit(L)));
+		RefreshUnit(&InfoUnit(L));
 	}
 	
 }
@@ -44,3 +44,29 @@ Player* SearchPlayer(int No)
 	}	
 }
 /* Mengirimkan pointer ke player yang memiliki nomor player No */
+
+void HealMage (Player P)
+{
+	/* KAMUS LOKAL */
+	Unit* U;
+	UnitList L;
+	int i;
+	
+	/* ALGORITMA */	
+	L = ListUnit(P);
+	
+	while(L != Nil){
+		if (TypeName(InfoUnit(L)) == ){
+			for(i = 1; i <= 4; i++){
+				U = ChooseAdjacentUnit(InfoUnit(L), i);
+				if ((U != Nil) && OwnerUnit(*U) == PlayerNo(P)){
+					Health(*U) += 4;
+					if (Health(*U) >= MaxHP(*U)){
+						Health(*U) = MaxHP(*U);
+					}
+				}
+			}
+		}
+		L = NextUnit(L);
+	}
+}

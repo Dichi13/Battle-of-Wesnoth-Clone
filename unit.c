@@ -93,10 +93,16 @@ boolean IsAdjacent(Unit U1, Unit U2) {
 }
 /* mengembalikan true jika kedua unit berjarak satu petak. */
 
+boolean CanRetaliate(Unit U1, Unit U2)
+{
+	return ((AtkType(U1) == AtkType(U2)) || AtkType(U2) == 'K' || (AtkType(U1) == 'K' && AtkType(U2) == 'M'));
+}
+/* Menghasilkan true jika tipe attack Unit U2 dapat retaliate jika diserang U1 */
+
 void AttackUnit(Unit *U1, Unit *U2) {
 	Health(*U2) -= Atk(*U1);
 	if (Health(*U2) > 0) {
-		if (AtkType(*U1) == AtkType(*U2) || AtkType(*U2) == 'K' || (AtkType(*U1) == 'K' && AtkType(*U2) == 'M')) {
+		if (CanRetaliate(*U1, *U2)) {
 			Health(*U1) -= Atk(*U2);
 		} 
 	}

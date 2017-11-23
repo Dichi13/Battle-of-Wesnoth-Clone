@@ -10,6 +10,7 @@
 #include "player.h"
 #include "turn.h"
 #include <math.h>
+#include "pcolor.h"
 
 
 
@@ -192,6 +193,8 @@ void recruit()
 					U = CreateUnit(i, Absis(dest), Ordinat(dest), PlayerNo(*currPlayer));
 					AddUnit(currPlayer, U);
 					PlotUnit(Petak(M, dest)) = &U;
+					MovePoint(U) = 0;
+					CanAtk(U) = false;
 				} else {
 					printf("You don't have enough gold to recruit that unit!\n");
 				}
@@ -210,65 +213,126 @@ void recruit()
 	}
 }
 
-void attack();
-
-
 boolean IsAdjacentEmpty(Unit U, boolean Enemy)
 {
 	/* KAMUS LOKAL */
-	POINT P, P1, P2, P3, P4;
+	boolean found;
+	Unit* UAd;
+	int i;
 	
 	/* ALGORITMA */
-	P = Position(U);
-	
-	P1 = MakePOINT(Absis(P)-1,Ordinat(P)); //Kiri
-	P2 = MakePOINT(Absis(P),Ordinat(P)+1); //Atas
-	P3 = MakePOINT(Absis(P)+1,Ordinat(P)); //Kanan
-	P4 = MakePOINT(Absis(P),Ordinat(P)-1); //Bawah
-	
-	if (!Enemy){
-		return (!((IsPlotInMap(M, P1) && !IsPlotEmpty(M, P1) && OwnerUnit(*PlotUnit(Petak(M, P1))) != PlayerNo(*currPlayer)) ||
-		(IsPlotInMap(M, P2) && !IsPlotEmpty(M, P2) && OwnerUnit(*PlotUnit(Petak(M, P2))) != PlayerNo(*currPlayer)) ||
-		(IsPlotInMap(M, P3) && !IsPlotEmpty(M, P3) && OwnerUnit(*PlotUnit(Petak(M, P3))) != PlayerNo(*currPlayer)) ||
-		(IsPlotInMap(M, P4) && !IsPlotEmpty(M, P4) && OwnerUnit(*PlotUnit(Petak(M, P4))) != PlayerNo(*currPlayer))));
+	if (Enemy){
+		i = 0;
+		while (i < 4 && !found){
+			i++;
+			UAd = ChooseAdjacentUnit(U, i);
+			found = ((UAd != Nil) && (OwnerUnit(*UAd) != PlayerNo(*currPlayer)));
+		}
 	}
 	else{
-		return (!((IsPlotInMap(M, P1) && !IsPlotEmpty(M, P1) && OwnerUnit(*PlotUnit(Petak(M, P1))) == PlayerNo(*currPlayer)) ||
-		(IsPlotInMap(M, P2) && !IsPlotEmpty(M, P2) && OwnerUnit(*PlotUnit(Petak(M, P2))) == PlayerNo(*currPlayer)) ||
-		(IsPlotInMap(M, P3) && !IsPlotEmpty(M, P3) && OwnerUnit(*PlotUnit(Petak(M, P3))) == PlayerNo(*currPlayer)) ||
-		(IsPlotInMap(M, P4) && !IsPlotEmpty(M, P4) && OwnerUnit(*PlotUnit(Petak(M, P4))) == PlayerNo(*currPlayer))));
+		i = 0;
+		while (i < 4 && !found){
+			i++;
+			UAd = ChooseAdjacentUnit(U, i);
+			found = ((UAd != Nil) && (OwnerUnit(*UAd) == PlayerNo(*currPlayer)));
+		}
 	}
 	
+	return found;
 }
 /* Menghasilkan True jika ada Unit untuk tipe Enemy di sekitar unit (Kiri/Atas/Kanan/Bawah) 
  * Mengecek keberadaan Musuh jika Enemy = true, dan sebaliknya */
 
-void ShowAdjacentUnit(Unit U, boolean Enemy)
+void ShowAttackTarget(Unit U)
 {
 	/* KAMUS LOKAL */
-	POINT P, P1, P2, P3, P4;
+	Unit* UAd;
+	int i, count;
 	
 	/* ALGORITMA */
-	P = Position(U);
+	count = 0;
+	for(i = 1; i <= 4; i++){
+		UAd = ChooseAdjacentUnit(U, i);
+		if (UAd != Nil){
+			count += 1;
+			printf("%d. ",count);
+			printf("%s ", TypeName(*UAd));
+			printf("(%d,%d) | Health %d/%d | ATK %d", Absis(Position(*UAd)), Ordinat(Position(*UAd)), Health(*UAd), MaxHP(*UAd), Atk(*UAd));
+			if(CanRetaliate(U, *UAd)){
+				printf(" (Retaliates)\n");
+			}
+			else{
+				printf(" (Does not Retaliate)\n");
+			}
+			
+		}
+	}
+}
+
+void Attack()
+{
+	/* KAMUS LOKAL */
+	int i, count, selection;
+	Unit* UAd;
 	
-	P1 = MakePOINT(Absis(P)-1,Ordinat(P)); //Kiri
-	P2 = MakePOINT(Absis(P),Ordinat(P)+1); //Atas
-	P3 = MakePOINT(Absis(P)+1,Ordinat(P)); //Kanan
-	P4 = MakePOINT(Absis(P),Ordinat(P)-1); //Bawah
-	
-	
-	if (Enemy) {
-		if (IsAdjacentEmpty(U, Enemy)){
-			printf("There are no enemies adjacent to selected Unit");
+	/* ALGORITMA */
+	if (CanAtk(*SelectedUnit)){
+		if (IsAdjacentEmpty(*SelectedUnit, true)){
+				printf("There are no enemies adjacent to selected Unit\n");
 		}
 		else{
-			if (IsPlotInMap(M, P1) && !IsPlotEmpty(M, P1)){
+			printf("Please​ ​select​ ​enemy​ ​you​ ​want​ ​to​ ​attack: \n");
+			ShowAttackTarget(*SelectedUnit);
+			do{
+				printf("Your selection : ");
+				scanf("%d", &selection);
+				count = 0;
+				i = 0;
+				while ((i < 4) || (count != selection)){
+					i++;
+					UAd = ChooseAdjacentUnit(*SelectedUnit, i);
+					if (UAd != Nil){
+						count++;
+					}
+				}
+				if(count != selection){
+					printf("Please select a valid target\n");
+				}
+			}while (count != selection);
+			AttackUnit(SelectedUnit, UAd);
+			printf("Enemy's %s is damaged by %d.", TypeName(*UAd), Atk(*SelectedUnit));
+			if (Health(*UAd) <= 0){
+				printf("Enemy's %s died.", TypeName(*UAd));
+				SetUnit(Position(*UAd), Nil);
+				DelUnit(SearchPlayer(OwnerUnit(*UAd)), UAd);
+				/*
+				if (UAd == King){
+				* you win
+				* } */
+			}
+			else{
+				if (CanRetaliate(*SelectedUnit, *UAd)){
+					printf("Enemy's %s retaliates.", TypeName(*UAd));
+					printf("Your %s is damaged by %d.", TypeName(*SelectedUnit), Atk(*UAd));
+					if(Health(*SelectedUnit) <= 0){
+						printf("Your %s died.", TypeName(*SelectedUnit));
+						SetUnit(Position(*SelectedUnit), Nil);
+						DelUnit(currPlayer, SelectedUnit);
+						SelectedUnit = Nil;
+						/*
+						if (SelectedUnit == King){
+						* you lose
+						* } */
+					}
+				}
 			}
 		}
 	}
-			
-			
+	else{
+		printf("This unit already attacked or has just been recruited");
+	}
 }
+
 
 /* Mencetak semua Unit yang jarak dengan Unit U = 1 
  * Menunjukan Unit musuh jika Enemy = true, dan sebaliknya */
@@ -295,7 +359,7 @@ void show_info()
 			printf("==​ ​Unit​ ​Info​ ​==\n");
 			if (PlotUnit(Petak(M, P)) != Nil){
 				printf("%s\n", TypeName(*PlotUnit(Petak(M, P))));
-				printf("Health %d | ATK %d", Health(*PlotUnit(Petak(M, P))), Atk(*PlotUnit(Petak(M, P))));
+				printf("Health %d/%d | ATK %d", Health(*PlotUnit(Petak(M, P))), MaxHP(*PlotUnit(Petak(M, P))), Atk(*PlotUnit(Petak(M, P))));
 			}
 			else{
 				printf("There is no unit inside this plot\n");
@@ -306,6 +370,82 @@ void show_info()
 		}
 	} while (!(IsIdxEff((Peta(M)), Absis(P), Ordinat(P))));
 }
+
+/* Input/Output */
+void PrintMap()
+{
+	/* KAMUS LOKAL */
+	int i, j;
+	POINT P;
+	
+	/* ALGORITMA */
+	for(i = GetFirstIdxBrs(Peta(M)); j <= GetLastIdxBrs(Peta(M)); i++){
+		/* Print garis "*****" */
+		printf("*");
+		for(j = GetFirstIdxKol(Peta(M)); j <= GetLastIdxKol(Peta(M)); j++){
+			printf("****");	
+		}
+		printf("\n");
+		
+		/* Print jenis petak */
+		printf("* ");
+		for(j = GetFirstIdxKol(Peta(M)); j <= GetLastIdxKol(Peta(M)); j++){
+			P = MakePOINT(i, j);
+			if (PlotType(Petak(M, P)) != 'N'){
+				if (Owner(Petak(M, P)) == 0){
+					printf("%c", PlotType(Petak(M, P)));
+				}
+				if (Owner(Petak(M, P)) == 1){
+					print_red(PlotType(Petak(M, P)));
+				}
+				if (Owner(Petak(M, P)) == 2){
+					print_blue(PlotType(Petak(M, P)));
+				}
+			}
+			else{
+				printf(" ");
+			}
+			printf(" *");
+		}
+		printf("\n");
+		
+		/* Print Unit */
+		printf("* ");
+		for(j = GetFirstIdxKol(Peta(M)); j <= GetLastIdxKol(Peta(M)); j++){
+			P = MakePOINT(i, j);
+			if (PlotUnit(Petak(M, P)) != Nil){
+				if (SelectedUnit == PlotUnit(Petak(M, P))){
+					print_green(TypeName(*PlotUnit(Petak(M, P)))[0]);
+				}
+				if (Owner(Petak(M, P)) == 1){
+					print_red(TypeName(*PlotUnit(Petak(M, P)))[0]);
+				}
+				if (Owner(Petak(M, P)) == 2){
+					print_blue(TypeName(*PlotUnit(Petak(M, P)))[0]);
+				}
+			}
+			else{
+				printf(" ");
+			}
+			printf(" *");
+		}
+		printf("\n");
+		
+		
+	}
+	for(j = GetFirstIdxKol(Peta(M)); j <= GetLastIdxKol(Peta(M)); j++){
+		printf("****");	
+	}
+	printf("\n");
+}	
+/* Map terdefinisi */
+/* Map dicetak pada layar dengan format
+ * ***** 
+ * *​ ​​X ​* 
+ * *​ ​​Y ​​* 
+ * *****
+ * Dengan X adalah jenis petak, dikosongkan jika petak Normal
+ * Y adalah jenis unit pada petak, dikosongkan jika tidak ada unit */
 
 /*
 void end_turn();

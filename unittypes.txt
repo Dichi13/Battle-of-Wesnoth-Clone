@@ -10,7 +10,7 @@ Harga 9999
 
 ID01
 Type Swordsman
-Health 20
+Health 24
 Attack 3
 MaxMove 2
 AtkType M

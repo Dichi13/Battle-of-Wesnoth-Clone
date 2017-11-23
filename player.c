@@ -45,8 +45,11 @@ void AddUnit(Player *P, Unit X)
 
 void DelUnit(Player *P, Unit *U) 
 {
+	/* KAMUS LOKAL*/
 	addressUnit AddrU,PrecAddrU,temp;
 	boolean bFound = false;
+	
+	/* ALGORITMA */
 	if (!IsEmptyUnit(*P)) {
 		AddrU = FirstUnit(ListUnit(*P));
 		PrecAddrU = Nil;
