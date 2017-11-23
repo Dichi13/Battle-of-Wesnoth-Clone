@@ -8,9 +8,15 @@
 #include "point.h"
 #include "stackMove.h"
 #include "player.h"
+#include "turn.h"
+#include <math.h>
 
+
+<<<<<<< HEAD
+=======
 extern Unit* SelectedUnit; // 
 extern int CurrPlayer;    // Ner, gw ubah jadi make yg pointer ya
+>>>>>>> 35b1a69d1f426c6b58bf86ef7124b5a166736a79
 
 /*
 void command()
@@ -49,13 +55,21 @@ boolean IsMoveValid(POINT dest, Unit U)
 	  pathclear = true;		//perlu dicek perjalanan ke petak itu dihalangi musuh atau tidak
 	  for(i = 1; i < dx; i++) {
 		  Geser(&current, 1, 0);
+<<<<<<< HEAD
+		  if ((PlotUnit(Petak(M, current))) != Nil) {
+=======
 		  if ((*PlotUnit(Petak(M, current))) != Nil) {
+>>>>>>> 35b1a69d1f426c6b58bf86ef7124b5a166736a79
 			  pathclear = pathclear && OwnerUnit(*PlotUnit(Petak(M, current))) == PlayerNo(*currPlayer);
 		  }
 	  }
 	  for(i = 1; i < dy; i++) {
 		  Geser(&current, 0, 1);
+<<<<<<< HEAD
+		  if ((PlotUnit(Petak(M, current))) != Nil) {
+=======
 		  if ((*PlotUnit(Petak(M, current))) != Nil) {
+>>>>>>> 35b1a69d1f426c6b58bf86ef7124b5a166736a79
 			  pathclear = pathclear && OwnerUnit(*PlotUnit(Petak(M, current))) == PlayerNo(*currPlayer);
 		  }
 	  }
@@ -64,21 +78,36 @@ boolean IsMoveValid(POINT dest, Unit U)
 		pathclear = true;
 		for(i = 1; i < dy; i++) {
 			Geser(&current, 0, 1);
+<<<<<<< HEAD
+			if ((PlotUnit(Petak(M, current))) != Nil) {
+=======
 			if ((*PlotUnit(Petak(M, current))) != Nil) {
+>>>>>>> 35b1a69d1f426c6b58bf86ef7124b5a166736a79
 				pathclear = pathclear && OwnerUnit(*PlotUnit(Petak(M, current))) == PlayerNo(*currPlayer);
 			}
 		}
 		for(i = 1; i < dx; i++) {
 			Geser(&current, 1, 0);
+<<<<<<< HEAD
+			if ((PlotUnit(Petak(M, current))) != Nil) {
+=======
 			if ((*PlotUnit(Petak(M, current))) != Nil) {
+>>>>>>> 35b1a69d1f426c6b58bf86ef7124b5a166736a79
 				pathclear = pathclear && OwnerUnit(*PlotUnit(Petak(M, current))) == PlayerNo(*currPlayer);
 			}
 		}
 	  }
+<<<<<<< HEAD
+  
+	}
+  
+	return valid && pathclear;
+=======
 	  
   }
   
   return valid && pathclear;
+>>>>>>> 35b1a69d1f426c6b58bf86ef7124b5a166736a79
 }
 
 void Move(Unit U)
@@ -92,8 +121,19 @@ void Move(Unit U)
     /* geser sejauh dx,dy */
     if (IsMoveValid(dest, U)){
 		Push(CreateUnitMove(Position(U), &U));
+<<<<<<< HEAD
+		MovePoint(U) -= abs(Absis(dest)-Absis(Position(U)))+abs(Ordinat(dest)-Ordinat(Position(U)));
+=======
 		MovePoint(U) -= abs(Absis(dest)-Absis(U))+abs(Ordinat(dest)-Ordinat(U));
+>>>>>>> 35b1a69d1f426c6b58bf86ef7124b5a166736a79
 		Position(U) = dest;
+		if((PlotType(Petak(M, dest)) == 'V') && (Owner(Petak(M, dest)) != PlayerNo(*currPlayer))){
+			DelVillage(SearchPlayer(Owner(Petak(M, dest))), &dest);
+			Income(*SearchPlayer(Owner(Petak(M, dest)))) -= IncomePerVillage;
+			AddVillage(currPlayer, dest);
+			Income(*currPlayer) += IncomePerVillage;
+			SetPlot(dest, 'V', PlayerNo(*currPlayer));
+		}
     }
     else
     {
@@ -114,7 +154,11 @@ void Undo()
 	Pop(&Prev);
 	undoUnit = *MovedUnit(Prev);
 	posawal = PrevPos(Prev);
+<<<<<<< HEAD
+	dist = abs(Absis(Position(undoUnit))-Absis(posawal))+abs(Ordinat(Position(undoUnit))-Ordinat(posawal));
+=======
 	dist = abs(Absis(undoUnit)-Absis(posawal))+abs(Ordinat(undoUnit)-Ordinat(posawal));
+>>>>>>> 35b1a69d1f426c6b58bf86ef7124b5a166736a79
 	MovePoint(undoUnit) += dist;
 	Position(undoUnit) = posawal;
 }
@@ -153,6 +197,7 @@ void recruit()
 	POINT dest;
 	boolean valid;
 	int i;
+	Unit U;
 	
 	/* ALGORITMA */
 	if (strcmp(TypeName(*SelectedUnit),"King") == 0){
@@ -181,7 +226,13 @@ void recruit()
 				scanf("%d", &i);
 				if (Gold(*currPlayer) >= TypeList[i].Cost) {
 					Gold(*currPlayer) -= TypeList[i].Cost;
+<<<<<<< HEAD
+					U = CreateUnit(i, Absis(dest), Ordinat(dest), PlayerNo(*currPlayer));
+					AddUnit(currPlayer, U);
+					PlotUnit(Petak(M, dest)) = &U;
+=======
 					AddUnit(currPlayer, CreateUnit(i, Absis(dest), Ordinat(dest), PlayerNo(currPlayer)));
+>>>>>>> 35b1a69d1f426c6b58bf86ef7124b5a166736a79
 				} else {
 					printf("You don't have enough gold to recruit that unit!\n");
 				}
@@ -202,14 +253,63 @@ void recruit()
 
 void attack();
 
-/*
-void show_map()
+
+boolean IsAdjacentEmpty(Unit U, boolean Enemy)
 {
-  PrintMap();
+	/* KAMUS LOKAL */
+	POINT P, P1, P2, P3, P4;
+	
+	/* ALGORITMA */
+	P = Position(U);
+	
+	P1 = MakePOINT(Absis(P)-1,Ordinat(P)); //Kiri
+	P2 = MakePOINT(Absis(P),Ordinat(P)+1); //Atas
+	P3 = MakePOINT(Absis(P)+1,Ordinat(P)); //Kanan
+	P4 = MakePOINT(Absis(P),Ordinat(P)-1); //Bawah
+	
+	if (!Enemy){
+		return (!((IsPlotInMap(M, P1) && !IsPlotEmpty(M, P1) && OwnerUnit(*PlotUnit(Petak(M, P1))) != PlayerNo(*currPlayer)) ||
+		(IsPlotInMap(M, P2) && !IsPlotEmpty(M, P2) && OwnerUnit(*PlotUnit(Petak(M, P2))) != PlayerNo(*currPlayer)) ||
+		(IsPlotInMap(M, P3) && !IsPlotEmpty(M, P3) && OwnerUnit(*PlotUnit(Petak(M, P3))) != PlayerNo(*currPlayer)) ||
+		(IsPlotInMap(M, P4) && !IsPlotEmpty(M, P4) && OwnerUnit(*PlotUnit(Petak(M, P4))) != PlayerNo(*currPlayer))));
+	}
+	else{
+		return (!((IsPlotInMap(M, P1) && !IsPlotEmpty(M, P1) && OwnerUnit(*PlotUnit(Petak(M, P1))) == PlayerNo(*currPlayer)) ||
+		(IsPlotInMap(M, P2) && !IsPlotEmpty(M, P2) && OwnerUnit(*PlotUnit(Petak(M, P2))) == PlayerNo(*currPlayer)) ||
+		(IsPlotInMap(M, P3) && !IsPlotEmpty(M, P3) && OwnerUnit(*PlotUnit(Petak(M, P3))) == PlayerNo(*currPlayer)) ||
+		(IsPlotInMap(M, P4) && !IsPlotEmpty(M, P4) && OwnerUnit(*PlotUnit(Petak(M, P4))) == PlayerNo(*currPlayer))));
+	}
+	
 }
-* */
+/* Menghasilkan True jika ada Unit untuk tipe Enemy di sekitar unit (Kiri/Atas/Kanan/Bawah) 
+ * Mengecek keberadaan Musuh jika Enemy = true, dan sebaliknya */
 
+void ShowAdjacentUnit(Unit U, boolean Enemy)
+{
+	/* KAMUS LOKAL */
+	POINT P, P1, P2, P3, P4;
+	
+	/* ALGORITMA */
+	P = Position(U);
+	
+	P1 = MakePOINT(Absis(P)-1,Ordinat(P)); //Kiri
+	P2 = MakePOINT(Absis(P),Ordinat(P)+1); //Atas
+	P3 = MakePOINT(Absis(P)+1,Ordinat(P)); //Kanan
+	P4 = MakePOINT(Absis(P),Ordinat(P)-1); //Bawah
+	
+	
+	if (Enemy) {
+		if (IsAdjacentEmpty(U, Enemy)){
+			printf("There are no enemies adjacent to selected Unit");
+		}
+		else{
+			if (IsPlotInMap(M, P1) && !IsPlotEmpty(M, P1)){
+			
+			
+}
 
+/* Mencetak semua Unit yang jarak dengan Unit U = 1 
+ * Menunjukan Unit musuh jika Enemy = true, dan sebaliknya */
 void show_info()
 {
 	/* KAMUS LOKAL */

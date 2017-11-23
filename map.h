@@ -10,6 +10,7 @@
 #include "plot.h"
 #include "unit.h"
 #include <stdio.h>
+#include "player.h"
 
 
 #define Nil NULL
@@ -38,8 +39,11 @@ boolean IsPlotEmpty(Map M, POINT P);
 /* Mengembalikan true jika tidak ada unit pada Plot dengan koordinat P */
 /* Tidak ada unit : PlotUnit(Petak(M, P)) = Nil */
 
+boolean IsPlotInMap(Map M, POINT P);
+/* Mengembalikan True jika koordinat P ada di Map */
+
 /* Konstruktor Plot */
-void SetPlot(POINT P, char PlotType, int Owner);
+void SetPlot(POINT P, char PlotType, int PlayerNo);
 /* I.S. Petak pada koordinat (X,Y) sembarang dengan koordinat terdefinisi */
 /* F.S. Terdefinisi Petak dengan koordinat (X,Y) dengan jenis petak Plottype dan pemilik Owner */
 

@@ -1,4 +1,3 @@
-
 #ifndef _UNIT_H_
 #define _UNIT_H_
 
@@ -66,7 +65,7 @@ void MoveUnit(Unit *U, int dx, int dy);
 boolean IsAdjacent(Unit U1, Unit U2);
 /* mengembalikan true jika kedua unit berjarak satu petak. */
 
-void Attack(Unit *U1, Unit *U2);
+void AttackUnit(Unit *U1, Unit *U2);
 /* I.S. U1 dan U2 terdefinisi */
 /* F.S. Melaksanakan serangan dari U1 ke U2 sesuai definisi "serangan" di spesifikasi tugas */
 

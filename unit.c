@@ -1,4 +1,3 @@
-
 #include "unit.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -94,7 +93,7 @@ boolean IsAdjacent(Unit U1, Unit U2) {
 }
 /* mengembalikan true jika kedua unit berjarak satu petak. */
 
-void Attack(Unit *U1, Unit *U2) {
+void AttackUnit(Unit *U1, Unit *U2) {
 	Health(*U2) -= Atk(*U1);
 	if (Health(*U2) > 0) {
 		if (AtkType(*U1) == AtkType(*U2) || AtkType(*U2) == 'K' || (AtkType(*U1) == 'K' && AtkType(*U2) == 'M')) {

@@ -6,6 +6,7 @@
 #include "unit.h"
 #include "mesinkata.h"
 #include <string.h>
+#include "player.h"
 
 #define Nil NULL
 

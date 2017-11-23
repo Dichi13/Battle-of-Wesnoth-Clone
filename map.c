@@ -8,6 +8,7 @@
 #include "unit.h"
 #include "map.h"
 #include <stdio.h>
+#include "player.h"
 
 /* Primitif Map */
 
@@ -20,11 +21,17 @@ boolean IsPlotEmpty(Map M, POINT P)
 /* Mengembalikan true jika tidak ada unit pada Plot dengan koordinat P */
 /* Tidak ada unit : PlotUnit(Petak(M, P)) = Nil */
 
+boolean IsPlotInMap(Map M, POINT P)
+{
+	return (IsIdxEff(Peta(M), Absis(P), Ordinat(P)));
+}
+/* Mengembalikan True jika koordinat P ada di Map */
+
 /* Konstruktor Plot */
-void SetPlot(POINT P, char PlotType, int Owner)
+void SetPlot(POINT P, char PlotType, int PlayerNo)
 {
 	PlotType(Petak(M, P)) = PlotType;
-	Owner(Petak(M, P)) = Owner;
+	Owner(Petak(M, P)) = PlayerNo;
 }
 /* I.S. Petak P sembarang dengan koordinat terdefinisi */
 /* F.S. Terdefinisi Petak P dengan jenis petak Plottype dan pemilik Owner */
