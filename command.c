@@ -12,8 +12,6 @@
 #include <math.h>
 #include "pcolor.h"
 
-
-
 /*
 void command()
 {
@@ -82,7 +80,7 @@ boolean IsMoveValid(POINT dest, Unit U)
   return valid && pathclear;
 }
 
-void Move(Unit U)
+void Move()
 {
   POINT dest;
 
@@ -91,10 +89,10 @@ void Move(Unit U)
     BacaPOINT(&dest);
     printf("\n");
     /* geser sejauh dx,dy */
-    if (IsMoveValid(dest, U)){
-		Push(Position(U));
-		MovePoint(U) -= abs(Absis(dest)-Absis(Position(U)))+abs(Ordinat(dest)-Ordinat(Position(U)));
-		Position(U) = dest;
+    if (IsMoveValid(dest, *SelectedUnit)){
+		Push(Position(*SelectedUnit));
+		MovePoint(*SelectedUnit) -= abs(Absis(dest)-Absis(Position(*SelectedUnit)))+abs(Ordinat(dest)-Ordinat(Position(*SelectedUnit)));
+		Position(*SelectedUnit) = dest;
 		if((PlotType(Petak(M, dest)) == 'V') && (Owner(Petak(M, dest)) != PlayerNo(*currPlayer))){
 			DelVillage(SearchPlayer(Owner(Petak(M, dest))), &dest);
 			Income(*SearchPlayer(Owner(Petak(M, dest)))) -= IncomePerVillage;
@@ -152,7 +150,7 @@ boolean IsCastleFull()
 }
 
 
-void recruit()
+void Recruit()
 {
 	/* KAMUS LOKAL */
 	POINT dest;
@@ -187,7 +185,7 @@ void recruit()
 				scanf("%d", &i);
 				if (Gold(*currPlayer) >= TypeList[i].Cost) {
 					Gold(*currPlayer) -= TypeList[i].Cost;
-					U = CreateUnit(i, Absis(dest), Ordinat(dest), PlayerNo(*currPlayer));
+					U = CreateUnit(i, dest, PlayerNo(*currPlayer));
 					AddUnit(currPlayer, U);
 					PlotUnit(Petak(M, dest)) = &U;
 					MovePoint(U) = 0;
@@ -302,7 +300,8 @@ void Attack()
 			if (Health(*UAd) <= 0){
 				printf("Enemy's %s died.", TypeName(*UAd));
 				if (StrSama(TypeName(*UAd), "King")){
-					/* insert victory code here */
+					EndGame = true;
+					Winner = OwnerUnit(*UAd);
 				}
 				SetUnit(Position(*UAd), Nil);
 				DelUnit(SearchPlayer(OwnerUnit(*UAd)), UAd);
@@ -317,7 +316,8 @@ void Attack()
 						DelUnit(currPlayer, SelectedUnit);
 						SelectedUnit = Nil;
 						if (StrSama(TypeName(*SelectedUnit), "King")){
-							/* insert victory code here */
+							EndGame = true;
+							Winner = OwnerUnit(*SelectedUnit);
 						}
 					}
 					UnreadyUnit(*SelectedUnit);
@@ -333,7 +333,7 @@ void Attack()
 
 /* Mencetak semua Unit yang jarak dengan Unit U = 1 
  * Menunjukan Unit musuh jika Enemy = true, dan sebaliknya */
-void show_info()
+void InfoPetak()
 {
 	/* KAMUS LOKAL */
 	POINT P;

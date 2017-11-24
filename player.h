@@ -65,8 +65,8 @@ void DealokUnit(addressUnit U);
 /* Dealokasi U */
 boolean IsEmptyUnit(Player P);
 /* Mengirimkan True jika Player P tidak memiliki unit apapun */
-void CreatePlayer(Player *P);
-/* Membuat player*/
+Player CreatePlayer(int No);
+/* Membuat player */
 void PrintUnitPlayer(Player P);
 /* Mencetak unit yang dimiliki player */
 void AddUnit(Player *P, Unit U);
@@ -85,6 +85,7 @@ void AddVillage(Player *PL, POINT P);
 /* Menambah Village pada POINT P ke dalam VillageList Player*/
 void DelVillage(Player *PL, POINT *P);
 /* Menghapus Village pada POINT P ke dalam VillageList Player*/
+
 
 
 

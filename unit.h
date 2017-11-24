@@ -54,7 +54,7 @@ void InitUnitTypeList();
 /* I.S. TypeList sembarang, terdapat file "unittype.txt" di folder yang sama */
 /* F.S. TypeList terdefinisi dan terisi dengan tipe-tipe unit yang digunakan dalam game */ 
 
-Unit CreateUnit(int IdxList, int X, int Y, int ownerNo);
+Unit CreateUnit(int IdxList, POINT P, int ownerNo);
 /* Membuat unit baru dengan tipe unit yang terdapat pada TypeList[IdxList] */
 /* Unit yang baru dibuat tidak dapat bergerak dan tidak bisa menyerang */
 

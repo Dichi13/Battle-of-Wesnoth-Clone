@@ -3,14 +3,20 @@
 
 /* Primitif-primitif Player */
 
-void CreatePlayer(Player *P)
+Player CreatePlayer(int No)
 {
-	/* Membuat player*/
-	Gold(*P) = InitGold;
-	Income(*P) = 0;
-	Upkeep(*P) = 0;
-	ListUnit(*P) = Nil;
-	ListVillage(*P) = Nil;
+	/* KAMUS LOKAL */
+	Player P;
+	
+	/* Algoritma */
+	PlayerNo(P) = No;
+	Gold(P) = InitGold;
+	Income(P) = 0;
+	Upkeep(P) = 0;
+	ListUnit(P) = Nil;
+	ListVillage(P) = Nil;
+	
+	return P;
 }
 
 void PrintUnitPlayer(Player P) 

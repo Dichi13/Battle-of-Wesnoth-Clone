@@ -34,6 +34,7 @@ typedef struct {
 #define InfoTop(S) (S).T[(S).TOP]
 
 extern UnitMovementStack MoveStack;
+
 /* ************ Prototype ************ */
 /* *** Konstruktor/Kreator *** */
 void CreateEmptyStack ();

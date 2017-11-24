@@ -1,0 +1,19 @@
+/* File untuk include semuanya */
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <time.h>
+#include "boolean.h"
+#include "command.h"
+#include "map.h"
+#include "matriks.h"
+#include "mesinkar.h"
+#include "mesinkata.h"
+#include "pcolor.h"
+#include "player.h"
+#include "plot.h"
+#include "point.h"
+#include "queue.h"
+#include "stackMove.h"
+#include "turn.h"
+#include "unit.h"

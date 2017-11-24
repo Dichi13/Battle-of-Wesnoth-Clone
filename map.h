@@ -66,6 +66,7 @@ void MakeNormalPlot();
 void MakePlayerPlot();
 /* I.S Peta(M) terdefinisi dengan semua petak berjenis normal (N) */
 /* F.S Terbentuk Map dengan Petak Castle dan Tower untuk setiap player tanpa King */
+/* Village telah terbentuk */
 
 void CreateVillage();
 /* I.S Map terdefinisi dengan semua jenis petak Normal kecuali petak Tower dan Castle milik pemain */

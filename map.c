@@ -8,7 +8,7 @@
 #include "unit.h"
 #include "map.h"
 #include <stdio.h>
-#include "player.h"
+
 
 /* Primitif Map */
 
