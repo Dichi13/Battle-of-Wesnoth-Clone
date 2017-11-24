@@ -1,6 +1,6 @@
 /* File : queue.h */
-/* Definisi ADT Queue dengan representasi array secara eksplisit dan alokasi dinamik */
-/* Model Implementasi Versi III dengan circular buffer */
+/* Definisi ADT Queue dengan representasi array secara eksplisit dan alokasi statik */
+/* Model Implementasi Versi I dengan circular buffer */
 
 #ifndef queue_H
 #define queue_H
@@ -13,12 +13,12 @@
 
 /* Definisi elemen dan address */
 typedef Player Queueinfotype;
-typedef int address;   /* indeks tabel */
+
 /* Contoh deklarasi variabel bertype Queue : */
 /* Versi I : tabel dinamik, Head dan Tail eksplisit, ukuran disimpan */
-typedef struct { Queueinfotype * T;   /* tabel penyimpan elemen */
-                 address HEAD;  /* alamat penghapusan */
-                 address TAIL;  /* alamat penambahan */
+typedef struct { Queueinfotype T[10+1];   /* tabel penyimpan elemen */
+                 int HEAD;  /* alamat penghapusan */
+                 int TAIL;  /* alamat penambahan */
                  int MaxEl;     /* Max elemen queue */
                } Queue;
 /* Definisi Queue kosong: HEAD=Nil; TAIL=Nil. */
@@ -48,12 +48,6 @@ void CreateEmptyQueue (Queue * Q, int Max);
 /* Jika alokasi berhasil, Tabel memori dialokasi berukuran Max+1 */
 /* atau : jika alokasi gagal, Q kosong dg MaxEl=0 */
 /* Proses : Melakukan alokasi, membuat sebuah Q kosong */
-
-/* *** Destruktor *** */
-void DeAlokasiQueue(Queue * Q);
-/* Proses: Mengembalikan memori Q */
-/* I.S. Q pernah dialokasi */
-/* F.S. Q menjadi tidak terdefinisi lagi, MaxEl(Q) diset 0 */
 
 /* *** Primitif Add/Delete *** */
 void AddQueue (Queue * Q, Queueinfotype X);

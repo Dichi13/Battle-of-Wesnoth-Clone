@@ -3,7 +3,7 @@
 #include "turn.h"
 #include "map.h"
 
-extern Queue PlayerTurns;
+Queue PlayerTurns;
 /* Player pada head adalah currPlayer */
 
 void ChangeTurns()
@@ -32,15 +32,13 @@ void ChangeTurns()
 Player* SearchPlayer(int No)
 {
 	/* KAMUS LOKAL */
-	Queue Q;
 	
 	/* ALGORITMA */
-	Q = PlayerTurns;
-	if (PlayerNo(InfoHead(Q)) == No){
-		return &InfoHead(Q);
+	if (PlayerNo(InfoHead(PlayerTurns)) == No){
+		return &InfoHead(PlayerTurns);
 	}
 	else{
-		return &InfoTail(Q);
+		return &InfoTail(PlayerTurns);
 	}	
 }
 /* Mengirimkan pointer ke player yang memiliki nomor player No */

@@ -10,6 +10,8 @@
 #include "unit.h"
 #include "point.h"
 
+UnitMovementStack MoveStack;
+
 /* ************ Prototype ************ */
 void CreateEmptyStack ()
 {

@@ -74,13 +74,14 @@ void SalinKata() {
 boolean StrSama (char *str1, char *str2) {
 	/* Kamus Lokal */
 	int i = 0;
-	boolean sama = true;
+	boolean sama;
 	
 	/* Algoritma */
-	while (str1[i] != '\0' && str2[i] != '\0') {
+	sama = true;
+	while (str1[i] != '\0' && str2[i] != '\0' && sama) {
 		sama = str1[i] == str2[i];
 		i++;
 	}
-	sama = str1[i] == str2[i];
+	
 	return sama;
 }

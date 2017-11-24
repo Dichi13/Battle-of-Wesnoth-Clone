@@ -12,22 +12,6 @@
 extern boolean EndGame;
 extern int Winner;
 
-/*
-void command()
-{
-  char command[14];
-  do
-  {
-    printf("Your Input: ");
-    fgets(command,14,key);
-    switch (command) {
-      case :
-    }
-  }
-  while (strcmp(command,"EXIT") != 0);
-}
-*/
-
 boolean IsMoveValid(POINT dest, Unit U);
 /* Menghasilkan true jika Move Unit U ke koordinat dest valid */
 
@@ -36,6 +20,12 @@ void Move();
 
 void Undo() ;
 /* Mengundo gerakan Move terakhir pada Unit */
+
+void ChangeUnit();
+/* Mengganti pilihan Unit */
+
+void NextSelect();
+/* Memilih secara automatis suatu unit pada List current player yang masih dapat menyerang atau bergerak */
 
 boolean IsCastleFull();
 /* Menghasilkan true jika semua Castle currPlayer memiliki unit */

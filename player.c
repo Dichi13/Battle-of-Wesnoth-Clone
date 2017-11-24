@@ -1,8 +1,10 @@
 #include "player.h"
 #include "stdlib.h"
 
-/* Primitif-primitif Player */
+Player* currPlayer;
+Unit* SelectedUnit;
 
+/* Primitif-primitif Player */
 Player CreatePlayer(int No)
 {
 	/* KAMUS LOKAL */
@@ -19,21 +21,28 @@ Player CreatePlayer(int No)
 	return P;
 }
 
+void PrintInfoPlayer(Player P)
+{
+	printf("Cash: %dG | Income: %dG | Upkeep: %dG\n", Gold(P), Income(P), Upkeep(P));
+}
+
 void PrintUnitPlayer(Player P) 
 {
-/* Mencetak unit yang dimiliki player */
+/* Mencetak unit yang dimiliki player dengan format 
+ * No. [Jenis Unit] [Koordinat Unit] | [Health Unit] */
+	/* KAMUS LOKAL */
 	addressUnit U;
-
-	printf("Unit: ");
-	if (!IsEmptyUnit(P))
-	{
-		U = FirstUnit(ListUnit(P));
-		while (U != Nil){
-			printf("%s (%d,%d) | Health %d/%d | Movement Point: %d | Can Attack: ", TypeName(InfoUnit(U)), Absis(Position(InfoUnit(U))), Ordinat(Position(InfoUnit(U))), Health(InfoUnit(U)), MaxHP(InfoUnit(U)), MovePoint(InfoUnit(U)));
-			U = NextUnit(U);
-		};
-	} else {
-		printf("Don't have any unit yet.\n");
+	int count;
+	
+	/* ALGORITMA */
+	printf("== List of Units ==\n");
+	
+	count = 0;
+	U = FirstUnit(ListUnit(P));
+	while (U != Nil){
+		count += 1;
+		printf("%d. %s (%d,%d) | Health %d/%d\n", count, TypeName(InfoUnit(U)), Absis(Position(InfoUnit(U))), Ordinat(Position(InfoUnit(U))), Health(InfoUnit(U)), MaxHP(InfoUnit(U)));
+		U = NextUnit(U);
 	}
 }
 
@@ -82,12 +91,6 @@ void DelUnit(Player *P, Unit *U)
 	}
 }
 
-void PrintInfoPlayer(Player P)
-{
-	printf("Cash: %dG | Income: %dG | Upkeep: %dG\n", Gold(P), Income(P), Upkeep(P));
-	PrintUnitPlayer(P);
-}
-
 addressUnit AlokUnit(infounit X) 
 {
 	addressUnit U;
@@ -105,6 +108,44 @@ void DealokUnit(addressUnit U)
 {
 	free(U);
 }
+
+int NbElmtListUnit(Player P)
+{
+	/* KAMUS LOKAL */
+	int count;
+	UnitList L;
+	
+	/* ALGORITMA */
+	count = 0;
+	L = ListUnit(P);
+	
+	while (L != Nil){
+		count += 1;
+		L = NextUnit(L);
+	}
+	
+	return count;
+}
+
+addressUnit TraversalElmtUnitList (Player P, int i)
+{
+	/* KAMUS LOKAL */
+	UnitList U;
+	int count;
+	
+	/* ALGORITMA */
+	U = ListUnit(P);
+	count = i;
+	while (count > 1){
+		U = NextUnit(U);
+		count -= 1;
+	}
+	
+	return U;		
+}
+/* Mengembalikan Unit ke-i jika dihitung dari depan dari ListUnit Player P */
+/* Elemen ke-i ada di ListUnit */
+
 
 addressPoint AlokVillage(POINT P)
 {

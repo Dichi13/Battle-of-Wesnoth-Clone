@@ -35,10 +35,11 @@ int main()
 	/* Pemilihan NEW GAME/LOAD GAME */
 	do{
 		PrintTitle();
-		printf("WOULD YOU LIKE TO START YOUR JOURNEY ANEW OR LOAD A GAME?");
+		printf("WOULD YOU LIKE TO START YOUR JOURNEY ANEW OR LOAD A GAME?\n");
 		printf("1. NEW GAME\n");
 		printf("2. LOAD GAME\n");
-		scanf("%d ", &IntSelection);
+		printf("Your input : ");
+		scanf("%d", &IntSelection);
 		if((IntSelection != 1) && (IntSelection != 2)){
 			printf("Please choose valid option\n");
 		}
@@ -50,15 +51,17 @@ int main()
 		do{
 			printf("Insert map size x y : ");
 			scanf("%d %d", &NB, &NK);
-			if (NB < 3 || NK < 3 || !IsIdxValid(NB, NK)){
-				printf("Please enter a value >3 and <= 100\n");
+			if (NB < 6 || NK < 6 || !IsIdxValid(NB, NK)){
+				printf("Please enter a value >6 and <= 100\n");
 			}
 		}
-		while (NB < 3 || NK < 3 || !IsIdxValid(NB, NK));
+		while (NB < 6 || NK < 6 || !IsIdxValid(NB, NK));
 		
 		InitMap(NB, NK);
 		
 		/* Inisialisasi Player */
+		CreateEmptyQueue(&PlayerTurns, 10);
+		
 		AddQueue(&PlayerTurns, CreatePlayer(1));
 		U = CreateUnit(0, MakePOINT(GetLastIdxBrs(Peta(M))-1, GetFirstIdxKol(Peta(M))+1), 1);
 		SetUnit(MakePOINT(GetLastIdxBrs(Peta(M))-1, GetFirstIdxKol(Peta(M))+1), &U);
@@ -66,20 +69,21 @@ int main()
 		
 		AddQueue(&PlayerTurns, CreatePlayer(2));
 		U = CreateUnit(0, MakePOINT(GetFirstIdxBrs(Peta(M))+1, GetLastIdxKol(Peta(M))-1), 2);
-		SetUnit(MakePOINT(GetLastIdxBrs(Peta(M))-1, GetFirstIdxKol(Peta(M))+1), &U);
+		SetUnit(MakePOINT(GetLastIdxBrs(Peta(M))+1, GetFirstIdxKol(Peta(M))-1), &U);
 		AddUnit(SearchPlayer(2), U);
+		
 	}
 	else{
 		/* FUNGSI LOAD GAME */
 	}
-	
 	/* Mulai Game */
+	CreateEmptyStack();
 	PrintMap();
 	SelectedUnit = Nil;
 	currPlayer = SearchPlayer(1);
 	do{
 		printf("\nPlayer %d's Turn\n", PlayerNo(*currPlayer));
-		printf("Money : %dG | Income : %dG | Upkeep : %dG", Gold(*currPlayer), Income(*currPlayer), Upkeep(*currPlayer));
+		PrintInfoPlayer(*currPlayer);
 		if (SelectedUnit != Nil){
 			printf("Unit : %s (%d,%d) | Health %d/%d | Movement Point(s) : %d | ", TypeName(*SelectedUnit), Absis(Position(*SelectedUnit)), Ordinat(Position(*SelectedUnit)), Health(*SelectedUnit), MaxHP(*SelectedUnit), MovePoint(*SelectedUnit));
 			if (CanAtk(*SelectedUnit)){
@@ -94,7 +98,9 @@ int main()
 		}
 		printf("\n");
 		
+		printf("Your input : ");
 		scanf(" %s", StringSelection);
+		printf("\n");
 		
 		if(StrSama(StringSelection, "MOVE")){
 			if(SelectedUnit == Nil){
@@ -113,40 +119,45 @@ int main()
 			}
 		}
 		else if(StrSama(StringSelection, "CHANGE_UNIT")){
-			/* FUNGSI CHANGE UNIT */
-			/* FUNGSI CLEAR STACK*/
+			ChangeUnit();
+			CreateEmptyStack();
 		}
 		else if(StrSama(StringSelection, "NEXT_UNIT")){
-			/* FUNGSI NEXT_UNIT */
-			/* FUNGSI CLEAR STACK*/
+			NextSelect();
+			CreateEmptyStack();
 		}
-		if(StrSama(StringSelection, "RECRUIT")){
-			Recruit();
-			/* FUNGSI CLEAR STACK */
+		else if(StrSama(StringSelection, "RECRUIT")){
+			if(SelectedUnit == Nil){
+				printf("You have not selected a unit\n");
+			}
+			else{
+				Recruit();
+				CreateEmptyStack();
+			}
 		}
-		if(StrSama(StringSelection, "ATTACK")){
+		else if(StrSama(StringSelection, "ATTACK")){
 			if(SelectedUnit == Nil){
 				printf("You have not selected a unit\n");
 			}
 			else{
 				Attack();
 			}
-			/* FUNGSI CLEAR STACK*/
+			CreateEmptyStack();
 		}
-		if(StrSama(StringSelection, "MAP")){
-			PrintMap();
-		}
-		if(StrSama(StringSelection, "INFO")){
+		else if(StrSama(StringSelection, "INFO")){
 			InfoPetak();
 		}
-		if(StrSama(StringSelection, "END_TURN")){
-			ChangeTurns();
-			/* FUNGSI CLEAR STACK */
+		else if(StrSama(StringSelection, "MAP")){
+			PrintMap();
 		}
-		if(StrSama(StringSelection, "SAVE")){
+		else if(StrSama(StringSelection, "END_TURN")){
+			ChangeTurns();
+			CreateEmptyStack();
+		}
+		else if(StrSama(StringSelection, "SAVE")){
 			/* FUNGSI SAVE */
 		}
-		if(StrSama(StringSelection, "EXIT")){
+		else if(StrSama(StringSelection, "EXIT")){
 		}
 		else{
 			printf("Please enter a valid input\n");

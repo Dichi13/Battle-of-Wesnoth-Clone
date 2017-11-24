@@ -43,14 +43,6 @@ int NBElmtQueue (Queue Q)
 /* *** Kreator *** */
 void CreateEmptyQueue (Queue * Q, int Max)
 {
-	(*Q).T = (Queueinfotype *)malloc(sizeof(Max + 1));
-
-	if ((*Q).T == 0){
-		MaxEl(*Q) = 0;
-	}
-	else{
-		MaxEl(*Q) = Max;
-	}
 	Head(*Q) = NilQueue;
 	Tail(*Q) = NilQueue;
 }
@@ -71,24 +63,23 @@ void AddQueue (Queue * Q, Queueinfotype X)
 	}
 	else{
 		Tail(*Q) += 1;
-		if (Tail(*Q) > MaxEl(*Q)){
-			Tail(*Q) = Tail(*Q) % MaxEl(*Q);
-		}
 	}
 	InfoTail(*Q) = X;
 }
 
 void DelQueue (Queue * Q, Queueinfotype * X)
 {
+	int i;
+	
 	*X = InfoHead(*Q);
 	if (NBElmtQueue(*Q) == 1){
 		Head(*Q) = NilQueue;
 		Tail(*Q) = NilQueue;
 	}
 	else{
-		Head(*Q) += 1;
-		if (Head(*Q) > MaxEl(*Q)){
-			Head(*Q) = Head(*Q) % MaxEl(*Q);
+		for (i = (Head(*Q))+1; i <= Tail(*Q); i++){
+			(*Q).T[i-1] = (*Q).T[i];
 		}
+		Tail(*Q) -= 1;
 	}
 }

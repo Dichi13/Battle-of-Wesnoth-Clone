@@ -12,21 +12,8 @@
 #include <math.h>
 #include "pcolor.h"
 
-/*
-void command()
-{
-  char command[14];
-  do
-  {
-    printf("Your Input: ");
-    fgets(command,14,key);
-    switch (command) {
-      case :
-    }
-  }
-  while (strcmp(command,"EXIT") != 0);
-}
-*/
+boolean EndGame;
+int Winner;
 
 boolean IsMoveValid(POINT dest, Unit U)
 {
@@ -85,7 +72,7 @@ void Move()
   POINT dest;
 
   {
-    printf("Please​ ​enter​ ​destination​ ​coordinate​ ​x​ ​y (example : 1 1 ) : \n");
+    printf("Please enter destination coordinate x y (example : 1 1 ) : \n");
     BacaPOINT(&dest);
     printf("\n");
     /* geser sejauh dx,dy */
@@ -93,12 +80,19 @@ void Move()
 		Push(Position(*SelectedUnit));
 		MovePoint(*SelectedUnit) -= abs(Absis(dest)-Absis(Position(*SelectedUnit)))+abs(Ordinat(dest)-Ordinat(Position(*SelectedUnit)));
 		Position(*SelectedUnit) = dest;
+		
+		/* Pengambilan Village */
 		if((PlotType(Petak(M, dest)) == 'V') && (Owner(Petak(M, dest)) != PlayerNo(*currPlayer))){
 			DelVillage(SearchPlayer(Owner(Petak(M, dest))), &dest);
 			Income(*SearchPlayer(Owner(Petak(M, dest)))) -= IncomePerVillage;
 			AddVillage(currPlayer, dest);
 			Income(*currPlayer) += IncomePerVillage;
 			SetPlot(dest, 'V', PlayerNo(*currPlayer));
+		}
+		
+		/* Mengubah CanAtk menjadi false jika tidak ada unit musuh disekitar untuk pemilihan NEXT_UNIT */
+		if ((MovePoint(*SelectedUnit) == 0) && (IsAdjacentEmpty(*SelectedUnit, true))){
+			CanAtk(*SelectedUnit) = false;
 		}
     }
     else
@@ -108,18 +102,70 @@ void Move()
   }
 }
 
+void ChangeUnit()
+{
+	/* KAMUS LOKAL */
+	int NBUnit, selection;
+	addressUnit U;
+	
+	/* ALGORITMA */
+	PrintUnitPlayer(*currPlayer);
+	NBUnit = NbElmtListUnit(*currPlayer);
+	do {
+		printf("Please enter your selection number : ");
+		scanf("%d", &selection);
+		if ((selection > NBUnit) || (selection <= 0)){
+			printf("Please enter a valid number\n");
+		}
+	} while ((selection > NBUnit) || (selection <= 0));
+	
+	U = TraversalElmtUnitList(*currPlayer, selection);
+	
+	SelectedUnit = &InfoUnit(U);
+	
+	printf("You are now selecting %s (%d,%d)\n", TypeName(*SelectedUnit), Absis(Position(*SelectedUnit)), Ordinat(Position(*SelectedUnit)));
+}
+
+void NextSelect()
+{
+	/* KAMUS LOKAL */
+	UnitList L;
+	boolean found;
+	Unit U;
+	
+	/* ALGORITMA */
+	L = ListUnit(*currPlayer);
+	found = false;
+	
+	while(L != Nil && !found){
+		U = InfoUnit(L);
+		found = (MovePoint(U) > 0 || CanAtk(U));
+		if (!found){
+			L = NextUnit(L);
+		}
+	}
+	
+	if (!found){
+		printf("None of your units are still able to act\n");
+	}
+	else{
+		*SelectedUnit = U;
+		printf("You are now selecting %s (%d,%d)\n", TypeName(*SelectedUnit), Absis(Position(*SelectedUnit)), Ordinat(Position(*SelectedUnit)));
+	}
+	
+}
 void Undo() 
 {
 	/* Kamus Lokal */
-	Unit undoUnit;
 	POINT PosAwal;
 	int dist;
 	
 	/* Algoritma */
 	Pop(&PosAwal);
-	dist = abs(Absis(Position(undoUnit))-Absis(PosAwal)) + abs(Ordinat(Position(undoUnit))-Ordinat(PosAwal));
-	MovePoint(undoUnit) += dist;
-	Position(undoUnit) = PosAwal;
+	dist = abs(Absis(Position(*SelectedUnit))-Absis(PosAwal)) + abs(Ordinat(Position(*SelectedUnit))-Ordinat(PosAwal));
+	MovePoint(*SelectedUnit) += dist;
+	Position(*SelectedUnit) = PosAwal;
+	CanAtk(*SelectedUnit) = true;
 }
 
 boolean IsCastleFull()
@@ -340,10 +386,10 @@ void InfoPetak()
 	
 	/* ALGORITMA */
 	do{
-		printf("Please​ ​enter​ ​cell’s​ ​coordinate​ ​x​ ​y: ");
+		printf("Please enter cell's coordinate x y : ");
 		BacaPOINT(&P);
 		if (IsIdxEff((Peta(M)), Absis(P), Ordinat(P))){
-			printf("==​ ​Plot​ ​Info​ ​==\n");
+			printf("== Plot Info ==\n");
 			printf("Plot type of ");
 			PrintPlotType(P);
 			printf("\n");
@@ -353,7 +399,7 @@ void InfoPetak()
 			else{
 				printf("Plot not owned by any player\n");
 			}
-			printf("==​ ​Unit​ ​Info​ ​==\n");
+			printf("== Unit Info ==\n");
 			if (PlotUnit(Petak(M, P)) != Nil){
 				printf("%s\n", TypeName(*PlotUnit(Petak(M, P))));
 				printf("Health %d/%d | ATK %d", Health(*PlotUnit(Petak(M, P))), MaxHP(*PlotUnit(Petak(M, P))), Atk(*PlotUnit(Petak(M, P))));
@@ -376,7 +422,7 @@ void PrintMap()
 	POINT P;
 	
 	/* ALGORITMA */
-	for(i = GetFirstIdxBrs(Peta(M)); j <= GetLastIdxBrs(Peta(M)); i++){
+	for(i = GetFirstIdxBrs(Peta(M)); i <= GetLastIdxBrs(Peta(M)); i++){
 		/* Print garis "*****" */
 		printf("*");
 		for(j = GetFirstIdxKol(Peta(M)); j <= GetLastIdxKol(Peta(M)); j++){
@@ -385,10 +431,11 @@ void PrintMap()
 		printf("\n");
 		
 		/* Print jenis petak */
-		printf("* ");
+		printf("*");
 		for(j = GetFirstIdxKol(Peta(M)); j <= GetLastIdxKol(Peta(M)); j++){
 			P = MakePOINT(i, j);
 			if (PlotType(Petak(M, P)) != 'N'){
+				printf(" ");
 				if (Owner(Petak(M, P)) == 0){
 					printf("%c", PlotType(Petak(M, P)));
 				}
@@ -396,21 +443,22 @@ void PrintMap()
 					print_red(PlotType(Petak(M, P)));
 				}
 				if (Owner(Petak(M, P)) == 2){
-					print_blue(PlotType(Petak(M, P)));
+					print_cyan(PlotType(Petak(M, P)));
 				}
 			}
 			else{
-				printf(" ");
+				printf("  ");
 			}
 			printf(" *");
 		}
 		printf("\n");
 		
 		/* Print Unit */
-		printf("* ");
+		printf("*");
 		for(j = GetFirstIdxKol(Peta(M)); j <= GetLastIdxKol(Peta(M)); j++){
 			P = MakePOINT(i, j);
 			if (PlotUnit(Petak(M, P)) != Nil){
+				printf(" ");
 				if (SelectedUnit == PlotUnit(Petak(M, P))){
 					print_green(TypeName(*PlotUnit(Petak(M, P)))[0]);
 				}
@@ -418,11 +466,11 @@ void PrintMap()
 					print_red(TypeName(*PlotUnit(Petak(M, P)))[0]);
 				}
 				if (Owner(Petak(M, P)) == 2){
-					print_blue(TypeName(*PlotUnit(Petak(M, P)))[0]);
+					print_cyan(TypeName(*PlotUnit(Petak(M, P)))[0]);
 				}
 			}
 			else{
-				printf(" ");
+				printf("  ");
 			}
 			printf(" *");
 		}
@@ -430,6 +478,7 @@ void PrintMap()
 		
 		
 	}
+	printf("*");
 	for(j = GetFirstIdxKol(Peta(M)); j <= GetLastIdxKol(Peta(M)); j++){
 		printf("****");	
 	}

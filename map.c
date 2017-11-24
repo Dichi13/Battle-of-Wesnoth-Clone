@@ -9,6 +9,8 @@
 #include "map.h"
 #include <stdio.h>
 
+/* Variabel global */
+Map M;
 
 /* Primitif Map */
 
@@ -94,7 +96,7 @@ void MakePlayerPlot()
 	SetPlot(P, 'C', 1);
 	P = MakePOINT(GetLastIdxBrs(Peta(M))-1, GetFirstIdxKol(Peta(M)));
 	SetPlot(P, 'C', 1);
-	P = MakePOINT(GetLastIdxBrs(Peta(M))-1, GetFirstIdxKol(Peta(M)));
+	P = MakePOINT(GetLastIdxBrs(Peta(M))-1, GetFirstIdxKol(Peta(M))+2);
 	SetPlot(P, 'C', 1);
 	P = MakePOINT(GetLastIdxBrs(Peta(M))-2, GetFirstIdxKol(Peta(M))+1);
 	SetPlot(P, 'C', 1);

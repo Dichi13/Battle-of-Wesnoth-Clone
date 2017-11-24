@@ -18,14 +18,14 @@ typedef struct LUnit {
 	addressUnit nextU;
 } ElmtUnitList;
 
+typedef addressUnit UnitList;
+
 typedef POINT infopoint;
 typedef struct LPoint* addressPoint;
 typedef struct LPoint {
 	infopoint infoV;
 	addressPoint nextV;
 } ElmtVillageList;
-
-typedef addressUnit UnitList;
 
 typedef addressPoint VillageList;
 
@@ -58,6 +58,12 @@ extern Unit* SelectedUnit;
 #define ListVillage(P) (P).VillageP
 
 /* Primitif-primitif Player */
+Player CreatePlayer(int No);
+/* Membuat player */
+void PrintUnitPlayer(Player P);
+/* Mencetak unit yang dimiliki player */
+void PrintInfoPlayer(Player P);
+/* Mencetak info Player P */
 
 addressUnit AlokUnit(Unit U);
 /* Alokasi unit U */
@@ -65,16 +71,16 @@ void DealokUnit(addressUnit U);
 /* Dealokasi U */
 boolean IsEmptyUnit(Player P);
 /* Mengirimkan True jika Player P tidak memiliki unit apapun */
-Player CreatePlayer(int No);
-/* Membuat player */
-void PrintUnitPlayer(Player P);
-/* Mencetak unit yang dimiliki player */
 void AddUnit(Player *P, Unit U);
 /* Menambah Unit U ke dalam UnitList Player*/
 void DelUnit(Player *P, Unit *U);
 /* Menghapus Unit U dari dalam List Unit Player */
-void PrintInfoPlayer(Player P);
-/* Mencetak info Player P */
+int NbElmtListUnit(Player P);
+/* Mengembalikan jumlah element ListUnit dari player P */
+addressUnit TraversalElmtUnitList (Player P, int i);
+/* Mengembalikan Unit ke-i jika dihitung dari depan dari ListUnit Player P */
+/* Elemen ke-i ada di ListUnit */
+
 addressPoint AlokVillage(POINT P);
 /* Alokasi unit Village pada POINT P */
 void DealokVillage(addressPoint V);
