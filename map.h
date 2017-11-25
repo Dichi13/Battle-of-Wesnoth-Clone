@@ -63,6 +63,9 @@ void MakeNormalPlot();
 /* Terbentuk Map dengan semua kepemilikan petak tidak ada yang punya, Owner = Nil */
 /* Terbentuk Map dengan semua tidak ada unit pada petak */
 
+POINT CastleCoordinate(int No);
+/* Mengembalikan koordinat castle pemain dengan PlayerNo No */
+
 void MakePlayerPlot();
 /* I.S Peta(M) terdefinisi dengan semua petak berjenis normal (N) */
 /* F.S Terbentuk Map dengan Petak Castle dan Tower untuk setiap player tanpa King */
@@ -87,6 +90,7 @@ void PrintPlotType(POINT P);
  * "Village" untuk type 'V'
  * "Normal plot" untuk type 'N' */
 
+/* Pemilihan petak pada Map */
 Unit* ChooseAdjacentUnit(Unit U, int choice);
 /* Mengembalikan pointer unit yang adjacent dari unit U, mengembalikan Nil jika tidak ada */
 /* Mengembalikakn unit adjacent berdasarkan pilihan choice
@@ -95,4 +99,5 @@ Unit* ChooseAdjacentUnit(Unit U, int choice);
  * 2 : Unit di atas
  * 3 : Unit di kanan
  * 4 : Unit di bawah */
+ 
 #endif

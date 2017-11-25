@@ -49,4 +49,30 @@ void InfoPetak();
 
 void PrintMap();
 /* Mencetak keseluruhan map */
+/* Map dicetak pada layar dengan format
+ * ***** 
+ * *​ ​​X ​* 
+ * *​ ​​Y ​​* 
+ * *   *
+ * *****
+ * Dengan X adalah jenis petak, dikosongkan jika petak Normal
+ * Y adalah jenis unit pada petak, dikosongkan jika tidak ada unit */
+
+void PrintMapMove();
+/* Map terdefinisi */
+/* Map dicetak pada layar dengan format
+ * ***** 
+ * *​ ​​X ​* 
+ * *​ ​​Y ​​* 
+ * *   *
+ * *****
+ * Dengan X adalah jenis petak, dikosongkan jika petak Normal
+ * Y adalah jenis unit pada petak, dikosongkan jika tidak ada unit */
+/* Tercetak
+ * ***** 
+ * *​ ​​X ​* 
+ * *​ ​​# ​​*
+ * *   * 
+ * *****
+ * jika petak tersebut valid untuk jalan unit */
 

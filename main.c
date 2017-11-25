@@ -63,13 +63,13 @@ int main()
 		CreateEmptyQueue(&PlayerTurns, 10);
 		
 		AddQueue(&PlayerTurns, CreatePlayer(1));
-		U = CreateUnit(0, MakePOINT(GetLastIdxBrs(Peta(M))-1, GetFirstIdxKol(Peta(M))+1), 1);
-		SetUnit(MakePOINT(GetLastIdxBrs(Peta(M))-1, GetFirstIdxKol(Peta(M))+1), &U);
+		U = CreateUnit(0, CastleCoordinate(1), 1);
+		SetUnit(CastleCoordinate(1), &U);
 		AddUnit(SearchPlayer(1), U);
 		
 		AddQueue(&PlayerTurns, CreatePlayer(2));
-		U = CreateUnit(0, MakePOINT(GetFirstIdxBrs(Peta(M))+1, GetLastIdxKol(Peta(M))-1), 2);
-		SetUnit(MakePOINT(GetLastIdxBrs(Peta(M))+1, GetFirstIdxKol(Peta(M))-1), &U);
+		U = CreateUnit(0, CastleCoordinate(2), 2);
+		SetUnit(CastleCoordinate(2), &U);
 		AddUnit(SearchPlayer(2), U);
 		
 	}
@@ -81,6 +81,18 @@ int main()
 	PrintMap();
 	SelectedUnit = Nil;
 	currPlayer = SearchPlayer(1);
+	ChangeTurns();
+	
+	do{
+		printf("Insert starting player : ");
+		scanf("%d", &IntSelection);
+		if(IntSelection == 1){
+			ChangeTurns();
+		}
+		else if (IntSelection != 2){
+			printf("Please enter a valid player number\n");
+		}
+	}while ((IntSelection != 1) && (IntSelection != 2));
 	do{
 		printf("\nPlayer %d's Turn\n", PlayerNo(*currPlayer));
 		PrintInfoPlayer(*currPlayer);

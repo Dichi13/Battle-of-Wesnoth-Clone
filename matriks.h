@@ -16,7 +16,7 @@
 typedef int indeks; /* indeks baris, kolom */
 typedef Plot ElType; 
 typedef struct { 
-	ElType Mem[BrsMax][KolMax];
+	ElType Mem[BrsMax+1][KolMax+1];
     int NBrsEff; /* banyaknya/ukuran baris yg terdefinisi */
 	int NKolEff; /* banyaknya/ukuran kolom yg terdefinisi */
 } MATRIKS;

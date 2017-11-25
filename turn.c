@@ -18,14 +18,13 @@ void ChangeTurns()
 	AddQueue(&PlayerTurns, P);
 	*currPlayer = InfoHead(PlayerTurns);
 	SelectedUnit = Nil;
-	
 	Gold(*currPlayer) += (Income(*currPlayer) - Upkeep(*currPlayer));
 	
 	L = ListUnit(P);
 	while (L != Nil){
 		RefreshUnit(&InfoUnit(L));
+		L = NextUnit(L);
 	}
-	
 }
 /* Berganti turn player */
 

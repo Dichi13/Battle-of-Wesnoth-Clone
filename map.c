@@ -52,7 +52,7 @@ void MakeEmptyMap(int X, int Y)
 	POINT P;
 	
 	/* ALGORITMA */
-	MakeMATRIKS(X, Y, &Peta(M));
+	MakeMATRIKS(Y, X, &Peta(M));
 	for(i = GetFirstIdxBrs(Peta(M)); i <= GetLastIdxBrs(Peta(M)); i++){
 		for(j = GetFirstIdxKol(Peta(M)); j <= GetLastIdxKol(Peta(M)); j++){
 			P = MakePOINT(i, j);
@@ -83,6 +83,23 @@ void MakeNormalPlot()
 /* Terbentuk Map dengan semua kepemilikan petak tidak ada yang punya, Owner = Nil */
 /* Terbentuk Map dengan semua tidak ada unit pada petak */
 
+POINT CastleCoordinate(int No)
+{
+	/* KAMUS LOKAL */
+	POINT P;
+	
+	/* ALGORITMA */
+	if(No == 1){
+		P = MakePOINT(GetFirstIdxKol(Peta(M)) + 1, GetLastIdxBrs(Peta(M)) - 1);
+	}
+	else{
+		P = MakePOINT(GetLastIdxKol(Peta(M)) - 1, GetFirstIdxBrs(Peta(M)) + 1);
+	}
+	
+	return P;
+}
+/* Mengembalikan koordinat castle pemain dengan PlayerNo No */
+
 void MakePlayerPlot()
 {
 	/* KAMUS LOKAL */
@@ -90,27 +107,27 @@ void MakePlayerPlot()
 	
 	/* ALGORITMA */
 	/* Inisiasi untuk Player 1 */
-	P = MakePOINT(GetLastIdxBrs(Peta(M))-1, GetFirstIdxKol(Peta(M))+1);
+	P = CastleCoordinate(1);
 	SetPlot(P, 'T', 1);
-	P = MakePOINT(GetLastIdxBrs(Peta(M)), GetFirstIdxKol(Peta(M))+1);
+	P = PlusDelta(P, -1, 0);
 	SetPlot(P, 'C', 1);
-	P = MakePOINT(GetLastIdxBrs(Peta(M))-1, GetFirstIdxKol(Peta(M)));
+	P = PlusDelta(P, 1, 1);
 	SetPlot(P, 'C', 1);
-	P = MakePOINT(GetLastIdxBrs(Peta(M))-1, GetFirstIdxKol(Peta(M))+2);
+	P = PlusDelta(P, 1, -1);
 	SetPlot(P, 'C', 1);
-	P = MakePOINT(GetLastIdxBrs(Peta(M))-2, GetFirstIdxKol(Peta(M))+1);
+	P = PlusDelta(P, -1, -1);
 	SetPlot(P, 'C', 1);
 	
 	/* Inisiasi untuk Player 2 */
-	P = MakePOINT(GetFirstIdxBrs(Peta(M))+1, GetLastIdxKol(Peta(M))-1);
+	P = CastleCoordinate(2);
 	SetPlot(P, 'T', 2);
-	P = MakePOINT(GetFirstIdxBrs(Peta(M)), GetLastIdxKol(Peta(M))-1);
+	P = PlusDelta(P, -1, 0);
 	SetPlot(P, 'C', 2);
-	P = MakePOINT(GetFirstIdxBrs(Peta(M))+1, GetLastIdxKol(Peta(M)));
+	P = PlusDelta(P, 1, 1);
 	SetPlot(P, 'C', 2);
-	P = MakePOINT(GetFirstIdxBrs(Peta(M))+1, GetLastIdxKol(Peta(M))-2);
+	P = PlusDelta(P, 1, -1);
 	SetPlot(P, 'C', 2);
-	P = MakePOINT(GetFirstIdxBrs(Peta(M))+2, GetLastIdxKol(Peta(M))-1);
+	P = PlusDelta(P, -1, -1);
 	SetPlot(P, 'C', 2);
 }
 /* I.S Peta(M) terdefinisi dengan semua petak berjenis normal (N) */
@@ -179,6 +196,7 @@ void PrintPlotType(POINT P)
  * "Village" untuk type 'V'
  * "Normal plot" untuk type 'N' */
 
+/* Pemilihan petak pada Map */
 Unit* ChooseAdjacentUnit(Unit U, int choice)
 /* Mengembalikan pointer unit yang adjacent dari unit U, mengembalikan Nil jika tidak ada */
 /* Mengembalikakn unit adjacent berdasarkan pilihan choice
@@ -214,3 +232,5 @@ Unit* ChooseAdjacentUnit(Unit U, int choice)
 		return Nil;
 	}
 }
+
+

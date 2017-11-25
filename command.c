@@ -37,13 +37,13 @@ boolean IsMoveValid(POINT dest, Unit U)
 	  for(i = 1; i < dx; i++) {
 		  Geser(&current, 1, 0);
 		  if ((PlotUnit(Petak(M, current))) != Nil) {
-			  pathclear = pathclear && OwnerUnit(*PlotUnit(Petak(M, current))) == PlayerNo(*currPlayer);
+			  pathclear = OwnerUnit(*PlotUnit(Petak(M, current))) == PlayerNo(*currPlayer);
 		  }
 	  }
 	  for(i = 1; i < dy; i++) {
 		  Geser(&current, 0, 1);
 		  if ((PlotUnit(Petak(M, current))) != Nil) {
-			  pathclear = pathclear && OwnerUnit(*PlotUnit(Petak(M, current))) == PlayerNo(*currPlayer);
+			  pathclear = OwnerUnit(*PlotUnit(Petak(M, current))) == PlayerNo(*currPlayer);
 		  }
 	  }
 	  if (!pathclear) {
@@ -52,13 +52,13 @@ boolean IsMoveValid(POINT dest, Unit U)
 		for(i = 1; i < dy; i++) {
 			Geser(&current, 0, 1);
 			if ((PlotUnit(Petak(M, current))) != Nil) {
-				pathclear = pathclear && OwnerUnit(*PlotUnit(Petak(M, current))) == PlayerNo(*currPlayer);
+				pathclear = OwnerUnit(*PlotUnit(Petak(M, current))) == PlayerNo(*currPlayer);
 			}
 		}
 		for(i = 1; i < dx; i++) {
 			Geser(&current, 1, 0);
 			if ((PlotUnit(Petak(M, current))) != Nil) {
-				pathclear = pathclear && OwnerUnit(*PlotUnit(Petak(M, current))) == PlayerNo(*currPlayer);
+				pathclear = OwnerUnit(*PlotUnit(Petak(M, current))) == PlayerNo(*currPlayer);
 			}
 		}
 	  }	  
@@ -69,17 +69,18 @@ boolean IsMoveValid(POINT dest, Unit U)
 
 void Move()
 {
-  POINT dest;
-
-  {
-    printf("Please enter destination coordinate x y (example : 1 1 ) : \n");
-    BacaPOINT(&dest);
-    printf("\n");
-    /* geser sejauh dx,dy */
-    if (IsMoveValid(dest, *SelectedUnit)){
+	POINT dest;
+	
+	PrintMapMove();
+	printf("Please enter destination coordinate x y (example : 1 1 ) : \n");
+	BacaPOINT(&dest);
+	printf("\n");
+	/* geser sejauh dx,dy */
+	if (IsMoveValid(dest, *SelectedUnit)){
 		Push(Position(*SelectedUnit));
-		MovePoint(*SelectedUnit) -= abs(Absis(dest)-Absis(Position(*SelectedUnit)))+abs(Ordinat(dest)-Ordinat(Position(*SelectedUnit)));
-		Position(*SelectedUnit) = dest;
+		SetUnit(Position(*SelectedUnit), Nil);
+		MoveUnit(SelectedUnit, Absis(dest) - Absis(Position(*SelectedUnit)), Ordinat(dest) - Ordinat(Position(*SelectedUnit)));
+		SetUnit(dest, SelectedUnit);
 		
 		/* Pengambilan Village */
 		if((PlotType(Petak(M, dest)) == 'V') && (Owner(Petak(M, dest)) != PlayerNo(*currPlayer))){
@@ -94,12 +95,11 @@ void Move()
 		if ((MovePoint(*SelectedUnit) == 0) && (IsAdjacentEmpty(*SelectedUnit, true))){
 			CanAtk(*SelectedUnit) = false;
 		}
-    }
-    else
-    {
-      printf("You can't move there\n");
-    }
-  }
+	}
+	else
+	{
+		printf("You can't move there\n");
+	}
 }
 
 void ChangeUnit()
@@ -122,6 +122,7 @@ void ChangeUnit()
 	U = TraversalElmtUnitList(*currPlayer, selection);
 	
 	SelectedUnit = &InfoUnit(U);
+	SetUnit(Position(*SelectedUnit), SelectedUnit);
 	
 	printf("You are now selecting %s (%d,%d)\n", TypeName(*SelectedUnit), Absis(Position(*SelectedUnit)), Ordinat(Position(*SelectedUnit)));
 }
@@ -164,7 +165,9 @@ void Undo()
 	Pop(&PosAwal);
 	dist = abs(Absis(Position(*SelectedUnit))-Absis(PosAwal)) + abs(Ordinat(Position(*SelectedUnit))-Ordinat(PosAwal));
 	MovePoint(*SelectedUnit) += dist;
+	SetUnit(Position(*SelectedUnit), Nil);
 	Position(*SelectedUnit) = PosAwal;
+	SetUnit(PosAwal, SelectedUnit);	
 	CanAtk(*SelectedUnit) = true;
 }
 
@@ -280,7 +283,7 @@ boolean IsAdjacentEmpty(Unit U, boolean Enemy)
 		}
 	}
 	
-	return found;
+	return !found;
 }
 /* Menghasilkan True jika ada Unit untuk tipe Enemy di sekitar unit (Kiri/Atas/Kanan/Bawah) 
  * Mengecek keberadaan Musuh jika Enemy = true, dan sebaliknya */
@@ -323,7 +326,7 @@ void Attack()
 				printf("There are no enemies adjacent to selected Unit\n");
 		}
 		else{
-			printf("Please​ ​select​ ​enemy​ ​you​ ​want​ ​to​ ​attack: \n");
+			printf("Please select the enemy unit you want to attack\n");
 			ShowAttackTarget(*SelectedUnit);
 			do{
 				printf("Your selection : ");
@@ -342,9 +345,9 @@ void Attack()
 				}
 			}while (count != selection);
 			AttackUnit(SelectedUnit, UAd);
-			printf("Enemy's %s is damaged by %d.", TypeName(*UAd), Atk(*SelectedUnit));
+			printf("Enemy's %s is damaged by %d.\n", TypeName(*UAd), Atk(*SelectedUnit));
 			if (Health(*UAd) <= 0){
-				printf("Enemy's %s died.", TypeName(*UAd));
+				printf("Enemy's %s died.\n", TypeName(*UAd));
 				if (StrSama(TypeName(*UAd), "King")){
 					EndGame = true;
 					Winner = OwnerUnit(*UAd);
@@ -354,10 +357,10 @@ void Attack()
 			}
 			else{
 				if (CanRetaliate(*SelectedUnit, *UAd)){
-					printf("Enemy's %s retaliates.", TypeName(*UAd));
-					printf("Your %s is damaged by %d.", TypeName(*SelectedUnit), Atk(*UAd));
+					printf("Enemy's %s retaliates.\n", TypeName(*UAd));
+					printf("Your %s is damaged by %d.\n", TypeName(*SelectedUnit), Atk(*UAd));
 					if(Health(*SelectedUnit) <= 0){
-						printf("Your %s died.", TypeName(*SelectedUnit));
+						printf("Your %s died.\n", TypeName(*SelectedUnit));
 						SetUnit(Position(*SelectedUnit), Nil);
 						DelUnit(currPlayer, SelectedUnit);
 						SelectedUnit = Nil;
@@ -372,7 +375,7 @@ void Attack()
 		}
 	}
 	else{
-		printf("This unit already attacked or has just been recruited");
+		printf("This unit already attacked or has just been recruited\n");
 	}
 }
 
@@ -399,9 +402,10 @@ void InfoPetak()
 			else{
 				printf("Plot not owned by any player\n");
 			}
-			printf("== Unit Info ==\n");
+			printf("\n== Unit Info ==\n");
 			if (PlotUnit(Petak(M, P)) != Nil){
 				printf("%s\n", TypeName(*PlotUnit(Petak(M, P))));
+				printf("Owned by Player %d\n", OwnerUnit(*PlotUnit(Petak(M, P))));
 				printf("Health %d/%d | ATK %d", Health(*PlotUnit(Petak(M, P))), MaxHP(*PlotUnit(Petak(M, P))), Atk(*PlotUnit(Petak(M, P))));
 			}
 			else{
@@ -412,6 +416,7 @@ void InfoPetak()
 			printf("Invalid plot\n");
 		}
 	} while (!(IsIdxEff((Peta(M)), Absis(P), Ordinat(P))));
+	printf("\n");
 }
 
 /* Input/Output */
@@ -422,18 +427,23 @@ void PrintMap()
 	POINT P;
 	
 	/* ALGORITMA */
+	printf("==-");
+	for(j = GetFirstIdxKol(Peta(M)); j <= GetLastIdxKol(Peta(M)); j++){
+		printf("-%d--",j);	
+	}
+	printf("\n");
 	for(i = GetFirstIdxBrs(Peta(M)); i <= GetLastIdxBrs(Peta(M)); i++){
 		/* Print garis "*****" */
-		printf("*");
+		printf("| *");
 		for(j = GetFirstIdxKol(Peta(M)); j <= GetLastIdxKol(Peta(M)); j++){
 			printf("****");	
 		}
 		printf("\n");
 		
 		/* Print jenis petak */
-		printf("*");
+		printf("| *");
 		for(j = GetFirstIdxKol(Peta(M)); j <= GetLastIdxKol(Peta(M)); j++){
-			P = MakePOINT(i, j);
+			P = MakePOINT(j, i);
 			if (PlotType(Petak(M, P)) != 'N'){
 				printf(" ");
 				if (Owner(Petak(M, P)) == 0){
@@ -454,18 +464,18 @@ void PrintMap()
 		printf("\n");
 		
 		/* Print Unit */
-		printf("*");
+		printf("%d *", i);
 		for(j = GetFirstIdxKol(Peta(M)); j <= GetLastIdxKol(Peta(M)); j++){
-			P = MakePOINT(i, j);
+			P = MakePOINT(j, i);
 			if (PlotUnit(Petak(M, P)) != Nil){
 				printf(" ");
 				if (SelectedUnit == PlotUnit(Petak(M, P))){
 					print_green(TypeName(*PlotUnit(Petak(M, P)))[0]);
 				}
-				if (Owner(Petak(M, P)) == 1){
+				else if (OwnerUnit(*PlotUnit(Petak(M, P))) == 1){
 					print_red(TypeName(*PlotUnit(Petak(M, P)))[0]);
 				}
-				if (Owner(Petak(M, P)) == 2){
+				else if (OwnerUnit(*PlotUnit(Petak(M, P))) == 2){
 					print_cyan(TypeName(*PlotUnit(Petak(M, P)))[0]);
 				}
 			}
@@ -476,9 +486,14 @@ void PrintMap()
 		}
 		printf("\n");
 		
+		printf("| *");
+		for(j = GetFirstIdxKol(Peta(M)); j <= GetLastIdxKol(Peta(M)); j++){
+			printf("   *");	
+		}
+		printf("\n");
 		
 	}
-	printf("*");
+	printf("| *");
 	for(j = GetFirstIdxKol(Peta(M)); j <= GetLastIdxKol(Peta(M)); j++){
 		printf("****");	
 	}
@@ -489,14 +504,109 @@ void PrintMap()
  * ***** 
  * *​ ​​X ​* 
  * *​ ​​Y ​​* 
+ * *   *
  * *****
  * Dengan X adalah jenis petak, dikosongkan jika petak Normal
  * Y adalah jenis unit pada petak, dikosongkan jika tidak ada unit */
 
-/*
-void end_turn();
-void save();
 
-void next_unit();
-*/
-
+void PrintMapMove()
+{
+	/* KAMUS LOKAL */
+	int i, j;
+	POINT P;
+	
+	/* ALGORITMA */
+	printf("==-");
+	for(j = GetFirstIdxKol(Peta(M)); j <= GetLastIdxKol(Peta(M)); j++){
+		printf("-%d--",j);	
+	}
+	printf("\n");	
+	for(i = GetFirstIdxBrs(Peta(M)); i <= GetLastIdxBrs(Peta(M)); i++){
+		/* Print garis "*****" */
+		printf("| *");
+		for(j = GetFirstIdxKol(Peta(M)); j <= GetLastIdxKol(Peta(M)); j++){
+			printf("****");	
+		}
+		printf("\n");
+		
+		/* Print jenis petak */
+		printf("| *");
+		for(j = GetFirstIdxKol(Peta(M)); j <= GetLastIdxKol(Peta(M)); j++){
+			P = MakePOINT(j, i);
+			if (PlotType(Petak(M, P)) != 'N'){
+				printf(" ");
+				if (Owner(Petak(M, P)) == 0){
+					printf("%c", PlotType(Petak(M, P)));
+				}
+				if (Owner(Petak(M, P)) == 1){
+					print_red(PlotType(Petak(M, P)));
+				}
+				if (Owner(Petak(M, P)) == 2){
+					print_cyan(PlotType(Petak(M, P)));
+				}
+			}
+			else{
+				printf("  ");
+			}
+			printf(" *");
+		}
+		printf("\n");
+		
+		/* Print Unit */
+		printf("%d *", i);
+		for(j = GetFirstIdxKol(Peta(M)); j <= GetLastIdxKol(Peta(M)); j++){
+			P = MakePOINT(j, i);
+			if (PlotUnit(Petak(M, P)) != Nil){
+				printf(" ");
+				if (SelectedUnit == PlotUnit(Petak(M, P))){
+					print_green(TypeName(*PlotUnit(Petak(M, P)))[0]);
+				}
+				else if (OwnerUnit(*PlotUnit(Petak(M, P))) == 1){
+					print_red(TypeName(*PlotUnit(Petak(M, P)))[0]);
+				}
+				else if (OwnerUnit(*PlotUnit(Petak(M, P))) == 2){
+					print_cyan(TypeName(*PlotUnit(Petak(M, P)))[0]);
+				}
+			}
+			else{
+				if(IsMoveValid(P, *SelectedUnit)){
+					printf(" #");
+				}
+				else{
+					printf("  ");
+				}
+			}
+			printf(" *");
+		}
+		printf("\n");
+		
+		printf("| *");
+		for(j = GetFirstIdxKol(Peta(M)); j <= GetLastIdxKol(Peta(M)); j++){
+			printf("   *");	
+		}
+		printf("\n");
+		
+	}
+	printf("| *");
+	for(j = GetFirstIdxKol(Peta(M)); j <= GetLastIdxKol(Peta(M)); j++){
+		printf("****");	
+	}
+	printf("\n");
+}	
+/* Map terdefinisi */
+/* Map dicetak pada layar dengan format
+ * ***** 
+ * *​ ​​X ​* 
+ * *​ ​​Y ​​* 
+ * *   *
+ * *****
+ * Dengan X adalah jenis petak, dikosongkan jika petak Normal
+ * Y adalah jenis unit pada petak, dikosongkan jika tidak ada unit */
+/* Tercetak
+ * ***** 
+ * *​ ​​X ​* 
+ * *​ ​​# ​​*
+ * *   * 
+ * *****
+ * jika petak tersebut valid untuk jalan unit */

@@ -83,6 +83,7 @@ Unit CreateUnit(int IdxList, POINT P, int ownerNo) {
 /* Catatan: IdxList harus sesuai dengan ID unit di unittypes.txt */
 
 void MoveUnit(Unit *U, int dx, int dy){
+	MovePoint(*U) -= abs(dx) + abs(dy);
 	Geser(&Position(*U), dx, dy);
 }
 /* I.S. U terdefinisi, dx dan dy valid */

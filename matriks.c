@@ -20,12 +20,12 @@ boolean IsIdxValid (int i, int j)
 /* *** Selektor: Untuk sebuah matriks M yang terdefinisi: *** */
 indeks GetFirstIdxBrs (MATRIKS M)
 {
-	return BrsMin-1;
+	return BrsMin;
 }
 
 indeks GetFirstIdxKol (MATRIKS M)
 {
-	return KolMin-1;
+	return KolMin;
 }
 
 indeks GetLastIdxBrs (MATRIKS M)
@@ -40,7 +40,7 @@ indeks GetLastIdxKol (MATRIKS M)
 
 boolean IsIdxEff (MATRIKS M, indeks i, indeks j)
 {
-	return (i >= BrsMin-1 && i <= NBrsEff(M)-1 && j >= KolMin-1 && j <= NKolEff(M)-1);
+	return (i >= BrsMin && i <= NBrsEff(M) && j >= KolMin && j <= NKolEff(M));
 }
 
 ElType GetElmtDiagonal (MATRIKS M, indeks i)
