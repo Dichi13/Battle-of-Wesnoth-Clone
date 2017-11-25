@@ -15,56 +15,87 @@
 boolean EndGame;
 int Winner;
 
+boolean IsPathClear(POINT src, POINT dest, Unit U)
+{
+	/* KAMUS LOKAL */
+	POINT Px, Py;
+	boolean ClearX, ClearY;
+	
+	/* ALGORITMA */
+	
+	if (EQ(src, dest)){
+		return true;
+	}
+	else{
+		Px = src;
+		Py = src;
+		
+		if (Absis(src) < Absis(dest)){
+			Geser(&Px, 1, 0);
+		}
+		if (Absis(src) > Absis(dest)){
+			Geser(&Px, -1, 0);
+		}
+		if (Ordinat(src) < Ordinat(dest)){
+			Geser(&Py, 0, 1);
+		}
+		if (Ordinat(src) > Ordinat(dest)){
+			Geser(&Py, 0, -1);
+		}
+		
+		if(EQ(Px, src)){
+			ClearX = false;
+		}
+		else{
+			if((PlotUnit(Petak(M, Px)) != Nil) && OwnerUnit(*PlotUnit(Petak(M, Px))) != OwnerUnit(U)){
+				ClearX = false;
+			}
+			else{
+				ClearX = IsPathClear(Px, dest, U);
+			}
+		}
+		if(EQ(Py, src)){
+				ClearY = false;
+		}
+		else{
+			if((PlotUnit(Petak(M, Py)) != Nil) && OwnerUnit(*PlotUnit(Petak(M, Py))) != OwnerUnit(U)){
+				ClearY = false;
+			}
+			else{
+				ClearY = IsPathClear(Py, dest, U);
+			}
+		}
+		
+		return (ClearX || ClearY);
+	}
+	
+}
+/* Mengembalikan true jika path dari src menuju dest memiliki jalur yang tidak dihalangi musuh */
+/* Dipastikan unit U dapat jalan ke dest dengan move pointnya jika tidak dihalangi */
+
 boolean IsMoveValid(POINT dest, Unit U)
 {
-  /* KAMUS LOKAL */
-  int dx, dy, i;
-  POINT current;
-  boolean valid, pathclear;
-  
-  /* ALGORITMA */
-  current = Position(U);
-  dx = abs(Absis(current) - Absis(dest));
-  dy = abs(Ordinat(current) - Ordinat(dest));
-  valid = ((dx + dy) <= MovePoint(U));
-  
-  if (valid) {
-	  if(PlotUnit(Petak(M, dest)) != Nil){
-		  valid = false;
-	  }
-	  
-	  pathclear = true;		//perlu dicek perjalanan ke petak itu dihalangi musuh atau tidak
-	  for(i = 1; i < dx; i++) {
-		  Geser(&current, 1, 0);
-		  if ((PlotUnit(Petak(M, current))) != Nil) {
-			  pathclear = OwnerUnit(*PlotUnit(Petak(M, current))) == PlayerNo(*currPlayer);
-		  }
-	  }
-	  for(i = 1; i < dy; i++) {
-		  Geser(&current, 0, 1);
-		  if ((PlotUnit(Petak(M, current))) != Nil) {
-			  pathclear = OwnerUnit(*PlotUnit(Petak(M, current))) == PlayerNo(*currPlayer);
-		  }
-	  }
-	  if (!pathclear) {
-		current = Position(U);
-		pathclear = true;
-		for(i = 1; i < dy; i++) {
-			Geser(&current, 0, 1);
-			if ((PlotUnit(Petak(M, current))) != Nil) {
-				pathclear = OwnerUnit(*PlotUnit(Petak(M, current))) == PlayerNo(*currPlayer);
-			}
-		}
-		for(i = 1; i < dx; i++) {
-			Geser(&current, 1, 0);
-			if ((PlotUnit(Petak(M, current))) != Nil) {
-				pathclear = OwnerUnit(*PlotUnit(Petak(M, current))) == PlayerNo(*currPlayer);
-			}
-		}
-	  }	  
-  }
-  
-  return valid && pathclear;
+	/* KAMUS LOKAL */
+	int dx, dy;
+	POINT current;
+	boolean valid, pathclear;
+	
+	/* ALGORITMA */
+	current = Position(U);
+	dx = abs(Absis(current) - Absis(dest));
+	dy = abs(Ordinat(current) - Ordinat(dest));
+	valid = ((dx + dy) <= MovePoint(U));
+	
+	if (valid) {
+		valid =  IsIdxEff(Peta(M), Absis(dest), Ordinat(dest));
+		if(valid && PlotUnit(Petak(M, dest)) != Nil){
+			valid = false;
+		}  
+	}
+	
+	pathclear = IsPathClear(Position(U), dest, U);
+	
+	return valid && pathclear;
 }
 
 void Move()

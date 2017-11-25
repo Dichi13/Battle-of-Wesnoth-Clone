@@ -12,6 +12,10 @@
 extern boolean EndGame;
 extern int Winner;
 
+boolean IsPathClear(POINT src, POINT dest, Unit U);
+/* Mengembalikan true jika path dari src menuju dest memiliki jalur yang tidak dihalangi musuh */
+/* Dipastikan unit U dapat jalan ke dest dengan move pointnya jika tidak dihalangi */
+
 boolean IsMoveValid(POINT dest, Unit U);
 /* Menghasilkan true jika Move Unit U ke koordinat dest valid */
 
