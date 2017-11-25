@@ -14,7 +14,7 @@ Health 24
 Attack 3
 MaxMove 2
 AtkType M
-Harga 4
+Harga 30
 
 ID02
 Type Archer
@@ -22,7 +22,7 @@ Health 20
 Attack 4
 MaxMove 2
 AtkType R
-Harga 5
+Harga 40
 
 ID03
 Type White_Mage
@@ -30,5 +30,5 @@ Health 15
 Attack 2
 MaxMove 2
 AtkType M
-Harga 6
+Harga 35
 .

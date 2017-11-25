@@ -214,16 +214,16 @@ Unit* ChooseAdjacentUnit(Unit U, int choice)
 	
 	if ((choice >= 1) && (choice <= 4)){
 		if (choice == 1){
-			PAd = MakePOINT(Absis(P)-1,Ordinat(P)); //Kiri
+			PAd = PlusDelta(P, -1, 0); //Kiri
 		}
 		if (choice == 2){
-			PAd = MakePOINT(Absis(P),Ordinat(P)+1); //Atas
+			PAd = PlusDelta(P, 0, 1); //Atas
 		}
 		if (choice == 3){
-			PAd = MakePOINT(Absis(P)+1,Ordinat(P)); //Kanan
+			PAd = PlusDelta(P, 1, 0); //Kanan
 		}
 		if (choice == 4){
-			PAd = MakePOINT(Absis(P),Ordinat(P)-1); //Bawah
+			PAd = PlusDelta(P, 0, -1); //Bawah
 		}
 		
 		return (PlotUnit(Petak(M, PAd)));

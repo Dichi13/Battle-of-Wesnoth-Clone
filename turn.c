@@ -25,6 +25,7 @@ void ChangeTurns()
 		RefreshUnit(&InfoUnit(L));
 		L = NextUnit(L);
 	}
+	HealMage(*currPlayer);
 }
 /* Berganti turn player */
 
@@ -56,8 +57,10 @@ void HealMage (Player P)
 		if (StrSama(TypeName(InfoUnit(L)), "White_Mage")){
 			for(i = 1; i <= 4; i++){
 				U = ChooseAdjacentUnit(InfoUnit(L), i);
-				if (OwnerUnit(*U) == PlayerNo(P)){
-					HealUnit(U, 3);
+				if (U != Nil){
+					if (OwnerUnit(*U) == PlayerNo(P)){
+						HealUnit(U, 3);
+					}
 				}
 			}
 		}

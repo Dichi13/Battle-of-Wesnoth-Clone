@@ -7,8 +7,8 @@
 #include "stdlib.h"
 
 #define Nil NULL
-#define InitGold 200
-#define IncomePerVillage 10
+#define InitGold 150
+#define IncomePerVillage 25
 #define UpkeepPerUnit 3
 
 typedef Unit infounit;

@@ -211,3 +211,4 @@ void DelVillage(Player *PL, POINT *P)
 	}
 }
 /* Menghapus Village pada POINT P ke dalam VillageList Player*/
+

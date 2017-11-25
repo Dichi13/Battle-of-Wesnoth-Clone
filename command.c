@@ -238,7 +238,6 @@ void Recruit()
 					U = CreateUnit(i, dest, PlayerNo(*currPlayer));
 					AddUnit(currPlayer, U);
 					UnreadyUnit(&U);
-					UnreadyUnit(SelectedUnit);
 				} else {
 					printf("You don't have enough gold to recruit that unit!\n");
 				}
@@ -334,11 +333,15 @@ void Attack()
 				scanf("%d", &selection);
 				count = 0;
 				i = 0;
-				while ((i < 4) || (count != selection)){
+				while ((i < 4) && (count != selection)){
 					i++;
+					printf("i %d\n", i);
 					UAd = ChooseAdjacentUnit(*SelectedUnit, i);
-					if ((UAd != Nil) && (PlayerNo(*currPlayer))){
-						count++;
+					if (UAd != Nil){
+						if (OwnerUnit(*UAd) != PlayerNo(*currPlayer)){
+							count++;
+							printf("count %d\n", count);
+						}
 					}
 				}
 				if(count != selection){

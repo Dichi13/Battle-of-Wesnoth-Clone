@@ -109,10 +109,10 @@ void UnreadyUnit(Unit *U)
 /* F.S. MovePoint unit menjadi 0 dan boolean Actionnya false */
 	
 void AttackUnit(Unit *U1, Unit *U2) {
-	Health(*U2) -= Atk(*U1);
+	Health(*U2) = Health(*U2) - Atk(*U1);
 	if (Health(*U2) > 0) {
 		if (CanRetaliate(*U1, *U2)) {
-			Health(*U1) -= Atk(*U2);
+			Health(*U1) = Health(*U1) - Atk(*U2);
 		} 
 	}
 }
@@ -127,7 +127,6 @@ void RefreshUnit(Unit *U){
 /* F.S MovePoint(U) berisi move point maksimum dan CanAtk(U) bernilai true */
 
 void HealUnit(Unit *U, int heal) {
-	
 	if ((Health(*U) + heal) > MaxHP(*U)) {
 		Health(*U) = MaxHP(*U);
 	} else {
