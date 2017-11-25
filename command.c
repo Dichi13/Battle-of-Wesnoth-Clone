@@ -103,7 +103,7 @@ void Move()
 	POINT dest;
 	
 	PrintMapMove();
-	printf("Please enter destination coordinate x y (example : 1 1 ) : \n");
+	printf("Please enter destination coordinate x y (example : 1 1 ) : ");
 	BacaPOINT(&dest);
 	printf("\n");
 	/* geser sejauh dx,dy */
@@ -128,6 +128,10 @@ void Move()
 		if ((MovePoint(*SelectedUnit) == 0) && (IsAdjacentEmpty(*SelectedUnit, true))){
 			CanAtk(*SelectedUnit) = false;
 		}
+		
+		printf("Your %s has moved to ", TypeName(*SelectedUnit));
+		TulisPOINT(dest);
+		printf("\n");
 	}
 	else
 	{
@@ -201,30 +205,32 @@ void Undo()
 	Position(*SelectedUnit) = PosAwal;
 	SetUnit(PosAwal, SelectedUnit);	
 	CanAtk(*SelectedUnit) = true;
+	
+	printf("Your %s previous move has been undone\n", TypeName(*SelectedUnit));
 }
 
 boolean IsCastleFull()
 {
 	/* KAMUS LOKAL */
 	boolean Full;
+	POINT P;
 	POINT C1, C2, C3, C4;
 	
 	/* ALGORITMA */
 	if(PlayerNo(*currPlayer) == 1){
 	/* Inisiasi untuk Player 1 */
-		C1 = MakePOINT(GetLastIdxBrs(Peta(M)), GetFirstIdxKol(Peta(M))+1);
-		C2 = MakePOINT(GetLastIdxBrs(Peta(M))-1, GetFirstIdxKol(Peta(M)));
-		C3 = MakePOINT(GetLastIdxBrs(Peta(M))-1, GetFirstIdxKol(Peta(M)));
-		C4 = MakePOINT(GetLastIdxBrs(Peta(M))-2, GetFirstIdxKol(Peta(M))+1);
+		P = TowerCoordinate(1);
 	}
 	if(PlayerNo(*currPlayer) == 2){
 	/* Inisiasi untuk Player 2 */
-		C1 = MakePOINT(GetFirstIdxBrs(Peta(M)), GetLastIdxKol(Peta(M))-1);
-		C2 = MakePOINT(GetFirstIdxBrs(Peta(M))+1, GetLastIdxKol(Peta(M)));
-		C3 = MakePOINT(GetFirstIdxBrs(Peta(M))+1, GetLastIdxKol(Peta(M))-2);
-		C4 = MakePOINT(GetFirstIdxBrs(Peta(M))+2, GetLastIdxKol(Peta(M))-1);
+		P = TowerCoordinate(2);
 	}
 	
+	C1 = PlusDelta(P, -1, 0);
+	C2 = PlusDelta(P, 1, 0);
+	C3 = PlusDelta(P, 0, 1);
+	C4 = PlusDelta(P, 0, -1);
+		
 	Full = ((PlotUnit(Petak(M, C1)) != Nil) && (PlotUnit(Petak(M, C2)) != Nil) && (PlotUnit(Petak(M, C3)) != Nil) && (PlotUnit(Petak(M, C4)) != Nil));
 	
 	return Full;	
@@ -265,6 +271,11 @@ void Recruit()
 				printf("Enter the index of the unit you want to recruit :");
 				scanf("%d", &i);
 				if (Gold(*currPlayer) >= TypeList[i].Cost) {
+					printf("You have recruited a");
+					if((TypeList[i].TypeName[0] == 'A') || (TypeList[i].TypeName[0] == 'I') || (TypeList[i].TypeName[0] == 'U') || (TypeList[i].TypeName[0] == 'E') || (TypeList[i].TypeName[0] == 'O')){
+						printf("n");
+					}
+					printf(" %s!\n", TypeList[i].TypeName);
 					Gold(*currPlayer) -= TypeList[i].Cost;
 					U = CreateUnit(i, dest, PlayerNo(*currPlayer));
 					AddUnit(currPlayer, U);
@@ -474,7 +485,7 @@ void PrintMap()
 	POINT P;
 	
 	/* ALGORITMA */
-	printf("==-");
+	printf("\n==-");
 	for(j = GetFirstIdxKol(Peta(M)); j <= GetLastIdxKol(Peta(M)); j++){
 		printf("-%d--",j);	
 	}
@@ -564,7 +575,7 @@ void PrintMapMove()
 	POINT P;
 	
 	/* ALGORITMA */
-	printf("==-");
+	printf("\n==-");
 	for(j = GetFirstIdxKol(Peta(M)); j <= GetLastIdxKol(Peta(M)); j++){
 		printf("-%d--",j);	
 	}

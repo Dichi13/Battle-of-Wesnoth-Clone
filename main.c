@@ -63,11 +63,11 @@ int main()
 		CreateEmptyQueue(&PlayerTurns, 10);
 		
 		AddQueue(&PlayerTurns, CreatePlayer(1));
-		K1 = CreateUnit(0, CastleCoordinate(1), 1);
+		K1 = CreateUnit(0, TowerCoordinate(1), 1);
 		AddUnit(SearchPlayer(1), K1);
 		
 		AddQueue(&PlayerTurns, CreatePlayer(2));
-		K2 = CreateUnit(0, CastleCoordinate(2), 2);
+		K2 = CreateUnit(0, TowerCoordinate(2), 2);
 		AddUnit(SearchPlayer(2), K2);
 		
 	}

@@ -63,7 +63,7 @@ void MakeNormalPlot();
 /* Terbentuk Map dengan semua kepemilikan petak tidak ada yang punya, Owner = Nil */
 /* Terbentuk Map dengan semua tidak ada unit pada petak */
 
-POINT CastleCoordinate(int No);
+POINT TowerCoordinate(int No);
 /* Mengembalikan koordinat castle pemain dengan PlayerNo No */
 
 void MakePlayerPlot();

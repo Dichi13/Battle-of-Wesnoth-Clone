@@ -83,7 +83,7 @@ void MakeNormalPlot()
 /* Terbentuk Map dengan semua kepemilikan petak tidak ada yang punya, Owner = Nil */
 /* Terbentuk Map dengan semua tidak ada unit pada petak */
 
-POINT CastleCoordinate(int No)
+POINT TowerCoordinate(int No)
 {
 	/* KAMUS LOKAL */
 	POINT P;
@@ -98,7 +98,7 @@ POINT CastleCoordinate(int No)
 	
 	return P;
 }
-/* Mengembalikan koordinat castle pemain dengan PlayerNo No */
+/* Mengembalikan koordinat Tower pemain dengan PlayerNo No */
 
 void MakePlayerPlot()
 {
@@ -107,7 +107,7 @@ void MakePlayerPlot()
 	
 	/* ALGORITMA */
 	/* Inisiasi untuk Player 1 */
-	P = CastleCoordinate(1);
+	P = TowerCoordinate(1);
 	SetPlot(P, 'T', 1);
 	P = PlusDelta(P, -1, 0);
 	SetPlot(P, 'C', 1);
@@ -119,7 +119,7 @@ void MakePlayerPlot()
 	SetPlot(P, 'C', 1);
 	
 	/* Inisiasi untuk Player 2 */
-	P = CastleCoordinate(2);
+	P = TowerCoordinate(2);
 	SetPlot(P, 'T', 2);
 	P = PlusDelta(P, -1, 0);
 	SetPlot(P, 'C', 2);
