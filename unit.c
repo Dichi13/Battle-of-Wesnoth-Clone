@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "mesinkata.h"
+#include <time.h>
 
 /* Deklarasi variabel global */
 UnitType *TypeList;
@@ -107,17 +108,8 @@ void UnreadyUnit(Unit *U)
 }
 /* I.S. Unit terdefinisi */
 /* F.S. MovePoint unit menjadi 0 dan boolean Actionnya false */
-	
-void AttackUnit(Unit *U1, Unit *U2) {
-	Health(*U2) = Health(*U2) - Atk(*U1);
-	if (Health(*U2) > 0) {
-		if (CanRetaliate(*U1, *U2)) {
-			Health(*U1) = Health(*U1) - Atk(*U2);
-		} 
-	}
-}
-/* I.S. U1 dan U2 terdefinisi, U1 memenuhi syarat untuk melakukan serangan ke U2 */
-/* F.S. Melaksanakan serangan dari U1 ke U2 sesuai definisi "serangan" di spesifikasi tugas */
+
+
 
 void RefreshUnit(Unit *U){
 	MovePoint(*U) = MaxMove(*U);

@@ -59,7 +59,7 @@ void HealMage (Player P)
 				U = ChooseAdjacentUnit(InfoUnit(L), i);
 				if (U != Nil){
 					if (OwnerUnit(*U) == PlayerNo(P)){
-						HealUnit(U, 3);
+						HealUnit(U, HealConstant);
 					}
 				}
 			}

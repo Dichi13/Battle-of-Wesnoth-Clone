@@ -233,4 +233,66 @@ Unit* ChooseAdjacentUnit(Unit U, int choice)
 	}
 }
 
+/* Combat Unit berdasarkan Petak */
+boolean MissChance(Unit U1, Unit U2, boolean Attacking)
+{
+	/* KAMUS LOKAL */
+	int Chance;
+	int Random;
+	
+	/* ALGORITMA */
+	Chance = 10;
+	if(StrSama(TypeName(U1), "Archer")){
+		Chance += 5;
+	}
+	if(StrSama(TypeName(U1), "King")){
+		Chance -= 10;
+	}
+	if(!Attacking){
+		Chance += 10;
+	}
+	if(PlotType(Petak(M, Position(U2))) == 'V'){
+		Chance += 5;
+	}
+	if(PlotType(Petak(M, Position(U2))) == 'C'){
+		Chance += 10;
+	}
+	if(PlotType(Petak(M, Position(U2))) == 'T'){
+		Chance += 15;
+	}
+	
+	Random = rand() % 100;
+	
+	return (Random < Chance);
+}
+/* Mengembalikan true jika kalkulasi misschance hasilnya true (Serangan unit U1 terhadap U2 miss) */
+/* Attacking bernilai true jika Unit U1 memulai combat (bukan retaliate) */
+/* Nilai misschance tiap unit berbeda */
+/* Default MissChance adalah 10% */
+/* Untuk unit tipe :
+ * Archer : 15%
+ * King : 0% */
+/* Unit yang retaliate memiliki miss change lebih tinggi (20%) (Mendorong player untuk lebih aktif dan inisiatif) */
+/* Unit mendapatkan bonus miss chance berdasarkan petak tempat unit itu berada : 
+ * Normal plot : 0%
+ * Village : 5%
+ * Castle : 10%
+ * Tower : 15% */
+
+ 
+void AttackUnit(Unit *U1, Unit *U2) {
+	if(!MissChance(*U1, *U2, true)){
+		Health(*U2) = Health(*U2) - Atk(*U1);
+		if (Health(*U2) > 0) {
+			if (CanRetaliate(*U1, *U2)) {
+				if(!MissChance(*U2, *U1, false)){
+					Health(*U1) = Health(*U1) - Atk(*U2);
+				}
+			} 
+		}
+	}
+}
+/* I.S. U1 dan U2 terdefinisi, U1 memenuhi syarat untuk melakukan serangan ke U2 */
+/* F.S. Melaksanakan serangan dari U1 ke U2 sesuai definisi "serangan" di spesifikasi tugas */
+
 

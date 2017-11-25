@@ -100,4 +100,21 @@ Unit* ChooseAdjacentUnit(Unit U, int choice);
  * 3 : Unit di kanan
  * 4 : Unit di bawah */
  
+/* Combat Unit */
+boolean MissChance(Unit U1, Unit U2, boolean Attacking);
+/* Mengembalikan true jika kalkulasi misschance hasilnya true (Serangan unit U1 terhadap U2 miss) */
+/* Attacking bernilai true jika Unit U1 memulai combat (bukan retaliate) */
+/* Default MissChance adalah 10% */
+/* Unit yang retaliate memiliki miss change lebih tinggi (20%) (Mendorong player untuk lebih aktif dan inisiatif) */
+/* Unit mendapatkan bonus miss chance berdasarkan petak tempat unit itu berada : 
+ * Normal plot : 0%
+ * Village : 5%
+ * Castle : 10%
+ * Tower : 20% */
+
+
+void AttackUnit(Unit *U1, Unit *U2);
+/* I.S. U1 dan U2 terdefinisi */
+/* F.S. Melaksanakan serangan dari U1 ke U2 sesuai definisi "serangan" di spesifikasi tugas */
+/* Unit yang diserang hanya dapat retaliate jika serangan penyerang tidak miss */
 #endif

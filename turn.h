@@ -2,6 +2,8 @@
 #include "queue.h"
 #include "map.h"
 
+#define HealConstant 25
+
 extern Queue PlayerTurns;
 /* Player pada head adalah currPlayer */
 

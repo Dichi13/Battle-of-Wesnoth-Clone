@@ -348,7 +348,7 @@ void ShowAttackTarget(Unit U)
 void Attack()
 {
 	/* KAMUS LOKAL */
-	int i, count, selection;
+	int i, count, selection, InitHP1, InitHP2;
 	Unit* UAd;
 	
 	/* ALGORITMA */
@@ -366,12 +366,10 @@ void Attack()
 				i = 0;
 				while ((i < 4) && (count != selection)){
 					i++;
-					printf("i %d\n", i);
 					UAd = ChooseAdjacentUnit(*SelectedUnit, i);
 					if (UAd != Nil){
 						if (OwnerUnit(*UAd) != PlayerNo(*currPlayer)){
 							count++;
-							printf("count %d\n", count);
 						}
 					}
 				}
@@ -379,32 +377,46 @@ void Attack()
 					printf("Please select a valid target\n");
 				}
 			}while (count != selection);
+			InitHP1 = Health(*SelectedUnit);
+			InitHP2 = Health(*UAd);
+			
 			AttackUnit(SelectedUnit, UAd);
-			printf("Enemy's %s is damaged by %d.\n", TypeName(*UAd), Atk(*SelectedUnit));
-			if (Health(*UAd) <= 0){
-				printf("Enemy's %s died.\n", TypeName(*UAd));
-				if (StrSama(TypeName(*UAd), "King")){
-					EndGame = true;
-					Winner = OwnerUnit(*UAd);
-				}
-				SetUnit(Position(*UAd), Nil);
-				DelUnit(SearchPlayer(OwnerUnit(*UAd)), UAd);
+			
+			if (Health(*UAd) == InitHP2){
+				printf("Your %s's attack missed\n", TypeName(*SelectedUnit));
 			}
-			else{
-				if (CanRetaliate(*SelectedUnit, *UAd)){
-					printf("Enemy's %s retaliates.\n", TypeName(*UAd));
-					printf("Your %s is damaged by %d.\n", TypeName(*SelectedUnit), Atk(*UAd));
-					if(Health(*SelectedUnit) <= 0){
-						printf("Your %s died.\n", TypeName(*SelectedUnit));
-						SetUnit(Position(*SelectedUnit), Nil);
-						DelUnit(currPlayer, SelectedUnit);
-						SelectedUnit = Nil;
-						if (StrSama(TypeName(*SelectedUnit), "King")){
-							EndGame = true;
-							Winner = OwnerUnit(*SelectedUnit);
-						}
+			else{ 
+				printf("Enemy's %s is damaged by %d.\n", TypeName(*UAd), Atk(*SelectedUnit));
+				if (Health(*UAd) <= 0){
+					printf("Enemy's %s died.\n", TypeName(*UAd));
+					if (StrSama(TypeName(*UAd), "King")){
+						EndGame = true;
+						Winner = OwnerUnit(*UAd);
 					}
-					UnreadyUnit(SelectedUnit);
+					SetUnit(Position(*UAd), Nil);
+					DelUnit(SearchPlayer(OwnerUnit(*UAd)), UAd);
+				}
+				else{
+					if (CanRetaliate(*SelectedUnit, *UAd)){
+						printf("Enemy's %s retaliates.\n", TypeName(*UAd));
+						if(Health(*SelectedUnit) == InitHP1){
+							printf("Enemy's %s's attack missed.\n", TypeName(*UAd));
+						}
+						else{
+							printf("Your %s is damaged by %d.\n", TypeName(*SelectedUnit), Atk(*UAd));
+							if(Health(*SelectedUnit) <= 0){
+								printf("Your %s died.\n", TypeName(*SelectedUnit));
+								if (StrSama(TypeName(*SelectedUnit), "King")){
+									EndGame = true;
+									Winner = OwnerUnit(*SelectedUnit);
+								}
+								SetUnit(Position(*SelectedUnit), Nil);
+								DelUnit(currPlayer, SelectedUnit);
+								SelectedUnit = Nil;
+							}
+						}
+						UnreadyUnit(SelectedUnit);
+					}
 				}
 			}
 		}

@@ -176,7 +176,10 @@ int main()
 	while(!StrSama(StringSelection, "EXIT") && !(EndGame));
 	
 	if(EndGame){
-		/* Pesan Game Selesai */
+		printf("\n");
+		PrintMap();
+		printf("\nThe battle has come to an end...\n");
+		printf("\nPlayer %d wins!!\n", Winner);
 	}
 	
 	printf("\nThanks for playing the game!\n");

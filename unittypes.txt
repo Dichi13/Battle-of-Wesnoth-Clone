@@ -2,32 +2,32 @@ jumlah_tipe 4
 
 ID00
 Type King
-Health 30
-Attack 5
+Health 200
+Attack 38
 MaxMove 3
 AtkType M
 Harga 9999
 
 ID01
 Type Swordsman
-Health 24
-Attack 3
+Health 160
+Attack 23
 MaxMove 2
 AtkType M
 Harga 30
 
 ID02
 Type Archer
-Health 20
-Attack 4
+Health 125
+Attack 32
 MaxMove 2
 AtkType R
 Harga 40
 
 ID03
 Type White_Mage
-Health 15
-Attack 2
+Health 100
+Attack 16
 MaxMove 2
 AtkType M
 Harga 35

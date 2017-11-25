@@ -72,10 +72,6 @@ void UnreadyUnit(Unit *U);
 boolean CanRetaliate(Unit U1, Unit U2);
 /* Menghasilkan true jika tipe attack Unit U2 dapat retaliate jika diserang U1 */
 
-void AttackUnit(Unit *U1, Unit *U2);
-/* I.S. U1 dan U2 terdefinisi */
-/* F.S. Melaksanakan serangan dari U1 ke U2 sesuai definisi "serangan" di spesifikasi tugas */
-
 void RefreshUnit(Unit *U);
 /* I.S. U terdefinisi */
 /* F.S MovePoint(U) berisi move point maksimum dan CanAtk(U) bernilai true */
