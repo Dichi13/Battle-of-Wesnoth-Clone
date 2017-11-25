@@ -1,5 +1,6 @@
 #include "player.h"
 #include "stdlib.h"
+#include "map.h"
 
 Player* currPlayer;
 Unit* SelectedUnit;
@@ -56,6 +57,8 @@ void AddUnit(Player *P, Unit X)
 	addressUnit U = AlokUnit(X);
 	NextUnit(U) = FirstUnit(ListUnit(*P));
 	FirstUnit(ListUnit(*P)) = U;
+	
+	SetUnit(Position(InfoUnit(U)), &InfoUnit(U));
 }
 
 void DelUnit(Player *P, Unit *U) 

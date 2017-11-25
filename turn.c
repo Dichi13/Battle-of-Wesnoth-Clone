@@ -56,11 +56,8 @@ void HealMage (Player P)
 		if (StrSama(TypeName(InfoUnit(L)), "White_Mage")){
 			for(i = 1; i <= 4; i++){
 				U = ChooseAdjacentUnit(InfoUnit(L), i);
-				if ((U != Nil) && OwnerUnit(*U) == PlayerNo(P)){
-					Health(*U) += 4;
-					if (Health(*U) >= MaxHP(*U)){
-						Health(*U) = MaxHP(*U);
-					}
+				if (OwnerUnit(*U) == PlayerNo(P)){
+					HealUnit(U, 3);
 				}
 			}
 		}

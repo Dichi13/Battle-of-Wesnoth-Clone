@@ -65,7 +65,7 @@ void MoveUnit(Unit *U, int dx, int dy);
 boolean IsAdjacent(Unit U1, Unit U2);
 /* mengembalikan true jika kedua unit berjarak satu petak. */
 
-void UnreadyUnit(Unit U);
+void UnreadyUnit(Unit *U);
 /* I.S. Unit terdefinisi */
 /* F.S. MovePoint unit menjadi 0 dan boolean Actionnya false */
 

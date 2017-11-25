@@ -73,6 +73,7 @@ boolean IsEmptyUnit(Player P);
 /* Mengirimkan True jika Player P tidak memiliki unit apapun */
 void AddUnit(Player *P, Unit U);
 /* Menambah Unit U ke dalam UnitList Player*/
+/* Unit pada Peta pada koordinat Position(U) menjadi U */
 void DelUnit(Player *P, Unit *U);
 /* Menghapus Unit U dari dalam List Unit Player */
 int NbElmtListUnit(Player P);

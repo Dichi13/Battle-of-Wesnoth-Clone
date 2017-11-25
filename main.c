@@ -25,7 +25,7 @@ int main()
 	char StringSelection[50];
 	int IntSelection;
 	int NB, NK;
-	Unit U;
+	Unit K1, K2;
 	
 	/* ALGORITMA */
 	EndGame = false;
@@ -63,14 +63,12 @@ int main()
 		CreateEmptyQueue(&PlayerTurns, 10);
 		
 		AddQueue(&PlayerTurns, CreatePlayer(1));
-		U = CreateUnit(0, CastleCoordinate(1), 1);
-		SetUnit(CastleCoordinate(1), &U);
-		AddUnit(SearchPlayer(1), U);
+		K1 = CreateUnit(0, CastleCoordinate(1), 1);
+		AddUnit(SearchPlayer(1), K1);
 		
 		AddQueue(&PlayerTurns, CreatePlayer(2));
-		U = CreateUnit(0, CastleCoordinate(2), 2);
-		SetUnit(CastleCoordinate(2), &U);
-		AddUnit(SearchPlayer(2), U);
+		K2 = CreateUnit(0, CastleCoordinate(2), 2);
+		AddUnit(SearchPlayer(2), K2);
 		
 	}
 	else{
@@ -78,7 +76,6 @@ int main()
 	}
 	/* Mulai Game */
 	CreateEmptyStack();
-	PrintMap();
 	SelectedUnit = Nil;
 	currPlayer = SearchPlayer(1);
 	ChangeTurns();
@@ -93,6 +90,7 @@ int main()
 			printf("Please enter a valid player number\n");
 		}
 	}while ((IntSelection != 1) && (IntSelection != 2));
+	PrintMap();
 	do{
 		printf("\nPlayer %d's Turn\n", PlayerNo(*currPlayer));
 		PrintInfoPlayer(*currPlayer);

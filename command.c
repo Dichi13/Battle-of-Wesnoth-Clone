@@ -84,8 +84,10 @@ void Move()
 		
 		/* Pengambilan Village */
 		if((PlotType(Petak(M, dest)) == 'V') && (Owner(Petak(M, dest)) != PlayerNo(*currPlayer))){
-			DelVillage(SearchPlayer(Owner(Petak(M, dest))), &dest);
-			Income(*SearchPlayer(Owner(Petak(M, dest)))) -= IncomePerVillage;
+			if(Owner(Petak(M, dest)) != 0){
+				DelVillage(SearchPlayer(Owner(Petak(M, dest))), &dest);
+				Income(*SearchPlayer(Owner(Petak(M, dest)))) -= IncomePerVillage;
+			}
 			AddVillage(currPlayer, dest);
 			Income(*currPlayer) += IncomePerVillage;
 			SetPlot(dest, 'V', PlayerNo(*currPlayer));
@@ -130,27 +132,26 @@ void ChangeUnit()
 void NextSelect()
 {
 	/* KAMUS LOKAL */
-	UnitList L;
 	boolean found;
-	Unit U;
+	addressUnit U;
 	
 	/* ALGORITMA */
-	L = ListUnit(*currPlayer);
+	U = ListUnit(*currPlayer);
 	found = false;
 	
-	while(L != Nil && !found){
-		U = InfoUnit(L);
-		found = (MovePoint(U) > 0 || CanAtk(U));
+	while(U != Nil && !found){
+		found = (MovePoint(InfoUnit(U)) > 0 || CanAtk(InfoUnit(U)));
 		if (!found){
-			L = NextUnit(L);
+			U = NextUnit(U);
 		}
 	}
-	
+
 	if (!found){
 		printf("None of your units are still able to act\n");
 	}
-	else{
-		*SelectedUnit = U;
+	else{	
+		SelectedUnit = &InfoUnit(U);
+		SetUnit(Position(*SelectedUnit), SelectedUnit);
 		printf("You are now selecting %s (%d,%d)\n", TypeName(*SelectedUnit), Absis(Position(*SelectedUnit)), Ordinat(Position(*SelectedUnit)));
 	}
 	
@@ -226,7 +227,7 @@ void Recruit()
 						}
 					}
 				} while (!valid);
-				printf("========== List of recruitable units ==========\n");
+				printf("\n========== List of recruitable units ==========\n");
 				for (i = 1; i<NbUnitType; i++) {
 					printf("%d. %s | Health %d | ATK %d | Cost %dG\n", i, TypeList[i].TypeName, TypeList[i].MaxHP, TypeList[i].Atk, TypeList[i].Cost);
 				}
@@ -236,13 +237,12 @@ void Recruit()
 					Gold(*currPlayer) -= TypeList[i].Cost;
 					U = CreateUnit(i, dest, PlayerNo(*currPlayer));
 					AddUnit(currPlayer, U);
-					PlotUnit(Petak(M, dest)) = &U;
-					MovePoint(U) = 0;
-					CanAtk(U) = false;
-					UnreadyUnit(*SelectedUnit);
+					UnreadyUnit(&U);
+					UnreadyUnit(SelectedUnit);
 				} else {
 					printf("You don't have enough gold to recruit that unit!\n");
 				}
+				printf("\n");
 				
 			}
 			else{
@@ -299,17 +299,18 @@ void ShowAttackTarget(Unit U)
 	for(i = 1; i <= 4; i++){
 		UAd = ChooseAdjacentUnit(U, i);
 		if (UAd != Nil){
-			count += 1;
-			printf("%d. ",count);
-			printf("%s ", TypeName(*UAd));
-			printf("(%d,%d) | Health %d/%d | ATK %d", Absis(Position(*UAd)), Ordinat(Position(*UAd)), Health(*UAd), MaxHP(*UAd), Atk(*UAd));
-			if(CanRetaliate(U, *UAd)){
-				printf(" (Retaliates)\n");
-			}
-			else{
-				printf(" (Does not Retaliate)\n");
-			}
-			
+			if (OwnerUnit(*UAd) != PlayerNo(*currPlayer)){
+				count += 1;
+				printf("%d. ",count);
+				printf("%s ", TypeName(*UAd));
+				printf("(%d,%d) | Health %d/%d | ATK %d", Absis(Position(*UAd)), Ordinat(Position(*UAd)), Health(*UAd), MaxHP(*UAd), Atk(*UAd));
+				if(CanRetaliate(U, *UAd)){
+					printf(" (Retaliates)\n");
+				}
+				else{
+					printf(" (Does not Retaliate)\n");
+				}
+			}			
 		}
 	}
 }
@@ -336,7 +337,7 @@ void Attack()
 				while ((i < 4) || (count != selection)){
 					i++;
 					UAd = ChooseAdjacentUnit(*SelectedUnit, i);
-					if (UAd != Nil){
+					if ((UAd != Nil) && (PlayerNo(*currPlayer))){
 						count++;
 					}
 				}
@@ -369,7 +370,7 @@ void Attack()
 							Winner = OwnerUnit(*SelectedUnit);
 						}
 					}
-					UnreadyUnit(*SelectedUnit);
+					UnreadyUnit(SelectedUnit);
 				}
 			}
 		}

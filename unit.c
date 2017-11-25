@@ -100,10 +100,10 @@ boolean CanRetaliate(Unit U1, Unit U2)
 }
 /* Menghasilkan true jika tipe attack Unit U2 dapat retaliate jika diserang U1 */
 
-void UnreadyUnit(Unit U)
+void UnreadyUnit(Unit *U)
 {
-	MovePoint(U) = 0;
-	CanAtk(U) = false;
+	MovePoint(*U) = 0;
+	CanAtk(*U) = false;
 }
 /* I.S. Unit terdefinisi */
 /* F.S. MovePoint unit menjadi 0 dan boolean Actionnya false */
