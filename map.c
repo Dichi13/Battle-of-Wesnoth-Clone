@@ -145,12 +145,12 @@ void CreateVillage()
 	NVillage = floor(NBElmt(Peta(M))/10);
 	
 	/* Inisialisasi random number generator */
-	srand((unsigned) time(&t));\
+	srand((unsigned) time(&t));
 	
 	for(i = 1; i <= NVillage; i++){
 		do{
-			Absis(P) = rand() % (MNBrsEff(M)-1);
-			Ordinat(P) = rand() % (MNKolEff(M)-1);
+			Absis(P) = (rand() % MNBrsEff(M)) + 1;
+			Ordinat(P) = (rand() % MNKolEff(M)) + 1;
 		} while (PlotType(Petak(M, P)) != 'N');
 		SetPlot(P, 'V', 0);
 	}
@@ -239,8 +239,11 @@ boolean MissChance(Unit U1, Unit U2, boolean Attacking)
 	/* KAMUS LOKAL */
 	int Chance;
 	int Random;
+	time_t t;
 	
 	/* ALGORITMA */
+	srand((unsigned) time(&t));
+	
 	Chance = 10;
 	if(StrSama(TypeName(U1), "Archer")){
 		Chance += 5;
@@ -261,7 +264,7 @@ boolean MissChance(Unit U1, Unit U2, boolean Attacking)
 		Chance += 15;
 	}
 	
-	Random = rand() % 100;
+	Random = (rand() % 100)+1;
 	
 	return (Random < Chance);
 }
