@@ -89,7 +89,7 @@ POINT TowerCoordinate(int No)
 	POINT P;
 	
 	/* ALGORITMA */
-	if(No == 1){
+	if(No == 2){
 		P = MakePOINT(GetFirstIdxKol(Peta(M)) + 1, GetLastIdxBrs(Peta(M)) - 1);
 	}
 	else{

@@ -501,7 +501,7 @@ void PrintMap()
 		/* Print jenis petak */
 		printf("| *");
 		for(j = GetFirstIdxKol(Peta(M)); j <= GetLastIdxKol(Peta(M)); j++){
-			P = MakePOINT(j, i);
+			P = MakePOINT(i, j);
 			if (PlotType(Petak(M, P)) != 'N'){
 				printf(" ");
 				if (Owner(Petak(M, P)) == 0){
@@ -524,7 +524,7 @@ void PrintMap()
 		/* Print Unit */
 		printf("%d *", i);
 		for(j = GetFirstIdxKol(Peta(M)); j <= GetLastIdxKol(Peta(M)); j++){
-			P = MakePOINT(j, i);
+			P = MakePOINT(i, j);
 			if (PlotUnit(Petak(M, P)) != Nil){
 				printf(" ");
 				if (SelectedUnit == PlotUnit(Petak(M, P))){
@@ -591,7 +591,7 @@ void PrintMapMove()
 		/* Print jenis petak */
 		printf("| *");
 		for(j = GetFirstIdxKol(Peta(M)); j <= GetLastIdxKol(Peta(M)); j++){
-			P = MakePOINT(j, i);
+			P = MakePOINT(i, j);
 			if (PlotType(Petak(M, P)) != 'N'){
 				printf(" ");
 				if (Owner(Petak(M, P)) == 0){
@@ -614,7 +614,7 @@ void PrintMapMove()
 		/* Print Unit */
 		printf("%d *", i);
 		for(j = GetFirstIdxKol(Peta(M)); j <= GetLastIdxKol(Peta(M)); j++){
-			P = MakePOINT(j, i);
+			P = MakePOINT(i, j);
 			if (PlotUnit(Petak(M, P)) != Nil){
 				printf(" ");
 				if (SelectedUnit == PlotUnit(Petak(M, P))){
