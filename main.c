@@ -51,11 +51,11 @@ int main()
 		do{
 			printf("Insert map size x y : ");
 			scanf("%d %d", &NB, &NK);
-			if (NB < 6 || NK < 6 || !IsIdxValid(NB, NK)){
-				printf("Please enter a value >6 and <= 100\n");
+			if (NB < 8 || NK < 8 || !IsIdxValid(NB, NK)){
+				printf("Please enter a value >8 and <= 100\n");
 			}
 		}
-		while (NB < 6 || NK < 6 || !IsIdxValid(NB, NK));
+		while (NB < 8 || NK < 8 || !IsIdxValid(NB, NK));
 		
 		InitMap(NB, NK);
 		
