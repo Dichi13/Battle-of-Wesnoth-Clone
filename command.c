@@ -124,6 +124,8 @@ void Move()
 			AddVillage(currPlayer, dest);
 			Income(*currPlayer) += IncomePerVillage;
 			SetPlot(dest, 'V', PlayerNo(*currPlayer));
+			
+			CreateEmptyStack();
 		}
 		
 		printf("Your %s has moved to ", TypeName(*SelectedUnit));
