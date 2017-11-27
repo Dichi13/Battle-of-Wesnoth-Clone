@@ -1,6 +1,5 @@
 #include "boolean.h"
 #include "matriks.h"
-#include "map.h"
 #include <stdio.h>
 
 /* ********** DEFINISI PROTOTIPE PRIMITIF ********** */              
