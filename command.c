@@ -274,6 +274,7 @@ void Recruit()
 					}
 					printf(" %s!\n", TypeList[i].TypeName);
 					Gold(*currPlayer) -= TypeList[i].Cost;
+					Upkeep(*currPlayer) += UpkeepPerUnit;
 					U = CreateUnit(i, dest, PlayerNo(*currPlayer));
 					AddUnit(currPlayer, U);
 					UnreadyUnit(&U);
