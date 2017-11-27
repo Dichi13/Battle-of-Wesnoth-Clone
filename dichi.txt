@@ -1,0 +1,23 @@
+Map 
+8 8 
+Village 
+2 3 
+2 5 
+4 5 
+6 6 
+7 8 
+8 7 
+Player 
+2 110 0 0 
+Unit 
+2 2 125 0 0 2 8 
+0 2 200 3 1 2 7 
+Village 
+Player 
+1 120 0 0 
+Unit 
+1 1 160 2 1 6 2 
+0 1 200 3 1 7 2 
+Village 
+END 
+.

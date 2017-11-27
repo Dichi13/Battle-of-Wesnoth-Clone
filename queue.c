@@ -1,8 +1,3 @@
-/* NIM				: 13516033 */
-/* Nama				: Abner Adhiwijna */
-/* Tanggal			: 06 Oktober 2017 */
-/* Topik praktikum	: Pra-Praktikum 06 */
-
 /* File : queue.c */
 /* Realisasi ADT Queue dengan representasi array secara eksplisit dan alokasi dinamik */
 /* Model Implementasi Versi III dengan circular buffer */

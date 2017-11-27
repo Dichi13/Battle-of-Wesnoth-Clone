@@ -19,6 +19,241 @@ void PrintTitle () {
 	printf("\\____/_____/_/_/  /_/_/   /___/_/  |_|\n");
 }
 
+void Save()
+{
+	/* KAMUS LOKAL */
+	FILE *f;
+	char filename[100];
+	addressPoint V;
+	addressUnit U;
+	int i, j;
+	POINT P;
+	
+	/* ALGORITMA */	
+	printf("Masukan nama file : ");
+	scanf(" %s", filename);
+	
+	f = fopen(filename, "w");
+	
+	fprintf(f, "Map \n");
+	fprintf(f, "%d %d \n", MNBrsEff(M), MNKolEff(M));
+	
+	fprintf(f, "Village \n");
+	for(i = 1; i <= MNBrsEff(M); i++){
+		for(j = 1; j <= MNKolEff(M); j++){
+			P = MakePOINT(i, j);
+			if (PlotType(Petak(M, P)) == 'V'){
+				fprintf(f, "%d %d \n", Absis(P), Ordinat(P));
+			}
+		}
+	}
+	
+	fprintf(f, "Player \n");
+	fprintf(f, "%d %d %d %d \n", PlayerNo(InfoHead(PlayerTurns)), Gold(InfoHead(PlayerTurns)), Income(InfoHead(PlayerTurns)), Upkeep(InfoHead(PlayerTurns)));
+	fprintf(f, "Unit \n");
+	U = FirstUnit(ListUnit(InfoHead(PlayerTurns)));
+	while (U != Nil){
+		fprintf(f, "%d %d %d %d %d %d %d \n", TypeID(InfoUnit(U)), OwnerUnit(InfoUnit(U)), Health(InfoUnit(U)), MovePoint(InfoUnit(U)), CanAtk(InfoUnit(U)), Absis(Position(InfoUnit(U))), Ordinat(Position(InfoUnit(U))));
+		U = NextUnit(U);
+	}
+	
+	fprintf(f, "Village \n");
+	V = FirstVillage(ListVillage(InfoHead(PlayerTurns)));
+	while(V != Nil){
+		fprintf(f, "%d %d \n", Absis(InfoVillage(V)), Ordinat(InfoVillage(V)));
+		V = NextVillage(V);
+	}
+	
+	fprintf(f, "Player \n");
+	fprintf(f, "%d %d %d %d \n", PlayerNo(InfoTail(PlayerTurns)), Gold(InfoTail(PlayerTurns)), Income(InfoTail(PlayerTurns)), Upkeep(InfoTail(PlayerTurns)));
+	fprintf(f, "Unit \n");
+	U = FirstUnit(ListUnit(InfoTail(PlayerTurns)));
+	while (U != Nil){
+		fprintf(f, "%d %d %d %d %d %d %d \n", TypeID(InfoUnit(U)), OwnerUnit(InfoUnit(U)), Health(InfoUnit(U)), MovePoint(InfoUnit(U)), CanAtk(InfoUnit(U)), Absis(Position(InfoUnit(U))), Ordinat(Position(InfoUnit(U))));
+		U = NextUnit(U);
+	}
+	
+	fprintf(f, "Village \n");
+	V = FirstVillage(ListVillage(InfoTail(PlayerTurns)));
+	while(V != Nil){
+		fprintf(f, "%d %d \n", Absis(InfoVillage(V)), Ordinat(InfoVillage(V)));
+		V = NextVillage(V);
+	}
+	
+	fprintf(f, "END \n");
+	fprintf(f, ".");
+	
+	fclose(f);	
+}
+
+
+void Load()
+{
+	/* KAMUS LOKAL */
+	char filename[100];
+	int NB, NK;
+	int X, Y;
+	POINT P;
+	int No, Gold, Income, Upkeep;
+	Player PL;
+	int Idx, Owner, Health, Move, Action;
+	Unit U;
+	char *Isi;
+	
+	/* ALGORITMA */
+	printf("Masukan nama file : ");
+	scanf(" %s", filename);
+	
+	STARTKATA(filename);
+	ADVKATA();
+	/* Ukuran Map */
+	NB = KataInt(CKata);
+	ADVKATA();
+	NK = KataInt(CKata);
+	ADVKATA();
+	
+	MakeEmptyMap(NB, NK);
+	MakeNormalPlot();
+	MakePlayerPlot();
+	
+	ADVKATA();
+	Isi = KataStr(CKata);
+	/* Pembacaan Village */
+	while (!StrSama(Isi, "Player")){
+		X = KataInt(CKata);
+		ADVKATA();
+		Y = KataInt(CKata);
+		ADVKATA();
+		P = MakePOINT(X, Y);
+		
+		Isi = KataStr(CKata);
+		SetPlot(P, 'V', 0);
+	}
+	
+	/* Pembacaan Player Pertama */
+	ADVKATA();
+	No = KataInt(CKata);
+	ADVKATA();
+	Gold = KataInt(CKata);
+	ADVKATA();
+	Income = KataInt(CKata);
+	ADVKATA();
+	Upkeep = KataInt(CKata);
+	ADVKATA();
+	PL = CreatePlayer(No);
+	
+	Gold(PL) = Gold;
+	Income(PL) = Income;
+	Upkeep(PL) = Upkeep;
+	
+	
+	ADVKATA();
+	Isi = KataStr(CKata);
+	
+	while (!StrSama(Isi, "Village")){
+		Idx = KataInt(CKata);
+		ADVKATA();
+		Owner = KataInt(CKata);
+		ADVKATA();
+		Health = KataInt(CKata);
+		ADVKATA();
+		Move = KataInt(CKata);
+		ADVKATA();
+		Action = KataInt(CKata);
+		ADVKATA();
+		X = KataInt(CKata);
+		ADVKATA();
+		Y = KataInt(CKata);
+		ADVKATA();
+		P = MakePOINT(X, Y);
+		Isi = KataStr(CKata);
+		
+		U = CreateUnit(Idx, P, Owner);
+		Health(U) = Health;
+		MovePoint(U) = Move;
+		CanAtk(U) = Action;
+		
+		AddUnit(&PL, U);
+	}
+	
+	ADVKATA();
+	Isi = KataStr(CKata);
+	while (!StrSama(Isi, "Player")){
+		X = KataInt(CKata);
+		ADVKATA();
+		Y = KataInt(CKata);
+		ADVKATA();
+		P = MakePOINT(X, Y);
+		Isi = KataStr(CKata);
+		
+		
+		AddVillage(&PL, P);
+		SetPlot(P, 'V', PlayerNo(PL));
+	}
+	
+	AddQueue(&PlayerTurns, PL);
+	/* Pembacaan Player Kedua */
+	ADVKATA();
+	No = KataInt(CKata);
+	ADVKATA();
+	Gold = KataInt(CKata);
+	ADVKATA();
+	Income = KataInt(CKata);
+	ADVKATA();
+	Upkeep = KataInt(CKata);
+	ADVKATA();
+	PL = CreatePlayer(No);
+	
+	Gold(PL) = Gold;
+	Income(PL) = Income;
+	Upkeep(PL) = Upkeep;
+	ADVKATA();
+	Isi = KataStr(CKata);
+	
+	
+	while (!StrSama(Isi, "Village")){
+		Idx = KataInt(CKata);
+		ADVKATA();
+		Owner = KataInt(CKata);
+		ADVKATA();
+		Health = KataInt(CKata);
+		ADVKATA();
+		Move = KataInt(CKata);
+		ADVKATA();
+		Action = KataInt(CKata);
+		ADVKATA();
+		X = KataInt(CKata);
+		ADVKATA();
+		Y = KataInt(CKata);
+		ADVKATA();
+		P = MakePOINT(X, Y);
+		Isi = KataStr(CKata);
+		
+		U = CreateUnit(Idx, P, Owner);
+		Health(U) = Health;
+		MovePoint(U) = Move;
+		CanAtk(U) = Action;
+		
+		AddUnit(&PL, U);
+	}
+	
+	ADVKATA();
+	Isi = KataStr(CKata);
+	while ((!EndKata) && (!StrSama(Isi, "END"))){
+		X = KataInt(CKata);
+		ADVKATA();
+		Y = KataInt(CKata);
+		ADVKATA();
+		Isi = KataStr(CKata);
+		
+		P = MakePOINT(X, Y);
+		AddVillage(&PL, P);
+		SetPlot(P, 'V', PlayerNo(PL));
+	}
+	AddQueue(&PlayerTurns, PL);
+	currPlayer = SearchPlayer(PlayerNo(InfoHead(PlayerTurns)));
+}
+
 int main()
 {
 	/* KAMUS */
@@ -70,26 +305,27 @@ int main()
 		K2 = CreateUnit(0, TowerCoordinate(2), 2);
 		AddUnit(SearchPlayer(2), K2);
 		
+		CreateEmptyStack();
+		currPlayer = SearchPlayer(1);
+		ChangeTurns();
+		
+		do{
+			printf("Insert starting player : ");
+			scanf("%d", &IntSelection);
+			if(IntSelection == 1){
+				ChangeTurns();
+			}
+			else if (IntSelection != 2){
+				printf("Please enter a valid player number\n");
+			}
+		}while ((IntSelection != 1) && (IntSelection != 2));
 	}
 	else{
-		/* FUNGSI LOAD GAME */
+		CreateEmptyQueue(&PlayerTurns, 10);
+		Load();
 	}
 	/* Mulai Game */
-	CreateEmptyStack();
 	SelectedUnit = Nil;
-	currPlayer = SearchPlayer(1);
-	ChangeTurns();
-	
-	do{
-		printf("Insert starting player : ");
-		scanf("%d", &IntSelection);
-		if(IntSelection == 1){
-			ChangeTurns();
-		}
-		else if (IntSelection != 2){
-			printf("Please enter a valid player number\n");
-		}
-	}while ((IntSelection != 1) && (IntSelection != 2));
 	PrintMap();
 	do{
 		printf("\nPlayer %d's Turn\n", PlayerNo(*currPlayer));
@@ -169,7 +405,7 @@ int main()
 			CreateEmptyStack();
 		}
 		else if(StrSama(StringSelection, "SAVE")){
-			/* FUNGSI SAVE */
+			Save();
 		}
 		else if(StrSama(StringSelection, "EXIT")){
 		}
