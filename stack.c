@@ -1,13 +1,13 @@
-/* File : stackMove.c */
+/* File : stack.c */
 /* Realisasi stack yang diimplementasi dengan tabel kontigu dan ukuran sama */
 /* TOP adalah alamat elemen puncak */
 /* Implementasi dalam bahasa C dengan alokasi statik */
+/* Tipe Elemen stack ada POINT */
 
 #include "boolean.h"
-#include "stackMove.h"
+#include "stack.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "unit.h"
 #include "point.h"
 
 UnitMovementStack MoveStack;

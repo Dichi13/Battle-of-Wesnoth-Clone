@@ -6,6 +6,7 @@
 
 #include "boolean.h"
 #include "mesinkar.h"
+#include <stdlib.h>
 
 #define NMax 50
 #define BLANK ' '
@@ -44,7 +45,15 @@ void SalinKata();
           CC = BLANK atau CC = MARK; 
           CC adalah karakter sesudah karakter terakhir yang diakuisisi.
           Jika panjang kata melebihi NMax, maka sisa kata "dipotong" */
-          
+
+int KataInt(Kata kat);
+/* mengubah Kata menjadi integer */
+
+
+char *KataStr(Kata kat);
+/* mengubah Kata menjadi string */
+
+  
 boolean StrSama (char *str1, char *str2);
 /* mengembalikan true bila str1 dan str2 adalah string yang sama */
 /* asumsi: str1 dan str2 adalah null-terminated string */

@@ -5,6 +5,7 @@
 #include "stdio.h"
 #include "pcolor.h"
 #include "stdlib.h"
+#include "map.h"
 
 #define Nil NULL
 #define InitGold 150

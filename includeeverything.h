@@ -13,7 +13,7 @@
 #include "plot.h"
 #include "map.h"
 #include "player.h"
-#include "stackMove.h"
+#include "stack.h"
 #include "turn.h"
 #include "command.h"
 #include "pcolor.h"

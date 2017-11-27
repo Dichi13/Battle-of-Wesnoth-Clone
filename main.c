@@ -119,6 +119,10 @@ int main()
 			else{
 				Move();
 			}
+			/* Mengubah CanAtk menjadi false jika tidak ada unit musuh disekitar agar pemilihan NEXT_UNIT lebibh berguna */
+			if ((MovePoint(*SelectedUnit) == 0) && (IsAdjacentEmpty(*SelectedUnit, true))){
+				CanAtk(*SelectedUnit) = false;
+			}
 		}
 		else if(StrSama(StringSelection, "UNDO")){
 			if (IsEmptyStack()){

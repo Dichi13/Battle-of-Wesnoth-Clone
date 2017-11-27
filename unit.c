@@ -8,32 +8,6 @@
 UnitType *TypeList;
 int NbUnitType;
 
-int KataInt(Kata kat) {
-/* mengubah Kata menjadi integer */
-	int res = 0, i = 1;
-	while (i <= kat.Length) {
-		res *= 10;
-		char *numstr = kat.TabKata;
-		res += (numstr[i] == '1') ? 1 : (numstr[i] == '2') ? 2 : (numstr[i] == '3') ? 3 : (numstr[i] == '4') ? 4 : (numstr[i] == '5') ? 5 : 
-		(numstr[i] == '6') ? 6 :(numstr[i] == '7') ? 7 :(numstr[i] == '8') ? 8 :(numstr[i] == '9') ? 9 : 0;
-		i++;
-	}
-	return res;
-}
-
-char *KataStr(Kata kat) {
-/* mengubah Kata menjadi string */
-	char *temp;
-	int i;
-	
-	temp = (char *) malloc(kat.Length*sizeof(char)+1);
-	for(i = 0; i < kat.Length; i++) {
-		temp[i] = kat.TabKata[i+1];
-	}
-	temp[i] = '\0';
-	return temp;
-}
-
 void InitUnitTypeList() {
 	int i = 0;
 	STARTKATA("unittypes.txt");
@@ -55,7 +29,7 @@ void InitUnitTypeList() {
 		TypeList[i].MaxMove = KataInt(CKata);
 		
 		ADVKATA(); ADVKATA();
-		TypeList[i].AtkType = KataInt(CKata);
+		TypeList[i].AtkType = KataStr(CKata)[0];
 		
 		ADVKATA(); ADVKATA();
 		TypeList[i].Cost = KataInt(CKata);

@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <math.h>
 #include "point.h"
-#include "stackMove.h"
+#include "stack.h"
 #include "player.h"
 #include "turn.h"
 #include <math.h>
@@ -100,8 +100,10 @@ boolean IsMoveValid(POINT dest, Unit U)
 
 void Move()
 {
+	/* KAMUS LOKAL */
 	POINT dest;
 	
+	/* ALGORITMA */
 	PrintMapMove();
 	printf("Please enter destination coordinate x y (example : 1 1 ) : ");
 	BacaPOINT(&dest);
@@ -122,11 +124,6 @@ void Move()
 			AddVillage(currPlayer, dest);
 			Income(*currPlayer) += IncomePerVillage;
 			SetPlot(dest, 'V', PlayerNo(*currPlayer));
-		}
-		
-		/* Mengubah CanAtk menjadi false jika tidak ada unit musuh disekitar untuk pemilihan NEXT_UNIT */
-		if ((MovePoint(*SelectedUnit) == 0) && (IsAdjacentEmpty(*SelectedUnit, true))){
-			CanAtk(*SelectedUnit) = false;
 		}
 		
 		printf("Your %s has moved to ", TypeName(*SelectedUnit));
@@ -406,6 +403,7 @@ void Attack()
 					}
 					SetUnit(Position(*UAd), Nil);
 					DelUnit(SearchPlayer(OwnerUnit(*UAd)), UAd);
+					UnreadyUnit(SelectedUnit);
 				}
 				else{
 					if (CanRetaliate(*SelectedUnit, *UAd)){
@@ -425,8 +423,10 @@ void Attack()
 								DelUnit(currPlayer, SelectedUnit);
 								SelectedUnit = Nil;
 							}
+							else{
+								UnreadyUnit(SelectedUnit);
+							}
 						}
-						UnreadyUnit(SelectedUnit);
 					}
 				}
 			}

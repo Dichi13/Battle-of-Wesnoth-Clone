@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <math.h>
 #include "point.h"
-#include "stackMove.h"
+#include "stack.h"
 #include "player.h"
 #include "turn.h"
 #include <math.h>
