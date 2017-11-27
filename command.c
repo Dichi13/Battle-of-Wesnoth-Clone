@@ -125,6 +125,7 @@ void Move()
 			Income(*currPlayer) += IncomePerVillage;
 			SetPlot(dest, 'V', PlayerNo(*currPlayer));
 			
+			UnreadyUnit(SelectedUnit);
 			CreateEmptyStack();
 		}
 		

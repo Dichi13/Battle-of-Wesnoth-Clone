@@ -1,4 +1,6 @@
 #include "includeeverything.h"
+#include "jam.h"
+#include <time.h>
 
 void PrintTitle () {
 	printf("           W  E  L  C  O  M  E   T  O\n");
@@ -29,12 +31,15 @@ void Save()
 	int i, j;
 	POINT P;
 	
+
 	/* ALGORITMA */	
 	printf("Masukan nama file : ");
 	scanf(" %s", filename);
 	
 	f = fopen(filename, "w");
 	
+	
+	/* State MAP */
 	fprintf(f, "Map \n");
 	fprintf(f, "%d %d \n", MNBrsEff(M), MNKolEff(M));
 	
@@ -48,6 +53,7 @@ void Save()
 		}
 	}
 	
+	/* State Player yang sedang dalam turnnya */
 	fprintf(f, "Player \n");
 	fprintf(f, "%d %d %d %d \n", PlayerNo(InfoHead(PlayerTurns)), Gold(InfoHead(PlayerTurns)), Income(InfoHead(PlayerTurns)), Upkeep(InfoHead(PlayerTurns)));
 	fprintf(f, "Unit \n");
@@ -64,6 +70,7 @@ void Save()
 		V = NextVillage(V);
 	}
 	
+	/* State Player yang lain */
 	fprintf(f, "Player \n");
 	fprintf(f, "%d %d %d %d \n", PlayerNo(InfoTail(PlayerTurns)), Gold(InfoTail(PlayerTurns)), Income(InfoTail(PlayerTurns)), Upkeep(InfoTail(PlayerTurns)));
 	fprintf(f, "Unit \n");
