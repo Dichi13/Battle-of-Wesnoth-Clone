@@ -6,29 +6,13 @@
 #include "pcolor.h"
 #include "stdlib.h"
 #include "map.h"
+#include "listlinierunit.h"
+#include "listliniervillage.h"
 
 #define Nil NULL
 #define InitGold 150
 #define IncomePerVillage 25
 #define UpkeepPerUnit 3
-
-typedef Unit infounit;
-typedef struct LUnit *addressUnit;
-typedef struct LUnit {
-	infounit infoU;
-	addressUnit nextU;
-} ElmtUnitList;
-
-typedef addressUnit UnitList;
-
-typedef POINT infopoint;
-typedef struct LPoint* addressPoint;
-typedef struct LPoint {
-	infopoint infoV;
-	addressPoint nextV;
-} ElmtVillageList;
-
-typedef addressPoint VillageList;
 
 typedef struct tPlayer{
 	int PlayerNo;
@@ -41,14 +25,6 @@ typedef struct tPlayer{
 
 extern Player* currPlayer;
 extern Unit* SelectedUnit;
-
-/* Selektor-selektro List Unit */
-#define InfoUnit(U) (U)->infoU      //U = addressUnit (Pointer ke tipe ElmtUnitList)
-#define NextUnit(U)	(U)->nextU		//U = addressUnit
-#define FirstUnit(L) (L)			//L = UnitList
-#define InfoVillage(V)	(V)->infoV			// V = addressPoint (Pointer ke tipe ElmtVillageList)
-#define NextVillage(V)	(V)->nextV			// V = addressPoint
-#define FirstVillage(L) (L) //L = VillageList
 
 /* Selektor-selektor Player*/
 #define PlayerNo(P) (P).PlayerNo
@@ -66,10 +42,6 @@ void PrintUnitPlayer(Player P);
 void PrintInfoPlayer(Player P);
 /* Mencetak info Player P */
 
-addressUnit AlokUnit(Unit U);
-/* Alokasi unit U */
-void DealokUnit(addressUnit U);
-/* Dealokasi U */
 boolean IsEmptyUnit(Player P);
 /* Mengirimkan True jika Player P tidak memiliki unit apapun */
 void AddUnit(Player *P, Unit U);
@@ -83,10 +55,6 @@ addressUnit TraversalElmtUnitList (Player P, int i);
 /* Mengembalikan Unit ke-i jika dihitung dari depan dari ListUnit Player P */
 /* Elemen ke-i ada di ListUnit */
 
-addressPoint AlokVillage(POINT P);
-/* Alokasi unit Village pada POINT P */
-void DealokVillage(addressPoint V);
-/* Dealokasi addressPoint V */
 boolean IsEmptyVillage(Player P);
 /* Mengirimkan True jika Player P tidak memiliki Village apapun */
 void AddVillage(Player *PL, POINT P);

@@ -16,8 +16,8 @@ Player CreatePlayer(int No)
 	Gold(P) = InitGold;
 	Income(P) = 0;
 	Upkeep(P) = 0;
-	ListUnit(P) = Nil;
-	ListVillage(P) = Nil;
+	CreateEmptyListUnit(&ListUnit(P));
+	CreateEmptyListVillage(&ListVillage(P));
 	
 	return P;
 }
@@ -49,15 +49,18 @@ void PrintUnitPlayer(Player P)
 
 boolean IsEmptyUnit(Player P) 
 {
-	return (FirstUnit(ListUnit(P)) == Nil);
+	return (IsEmptyUnitList(ListUnit(P)));
 }
 
 void AddUnit(Player *P, Unit X) 
 {
-	addressUnit U = AlokUnit(X);
+	/* KAMUS LOKAL */
+	addressUnit U;
+	
+	/* ALGORITMA */
+	U = AlokUnit(X);
 	NextUnit(U) = FirstUnit(ListUnit(*P));
 	FirstUnit(ListUnit(*P)) = U;
-	
 	SetUnit(Position(InfoUnit(U)), &InfoUnit(U));
 }
 
@@ -92,24 +95,6 @@ void DelUnit(Player *P, Unit *U)
 			}
 		}
 	}
-}
-
-addressUnit AlokUnit(infounit X) 
-{
-	addressUnit U;
-
-	U = (addressUnit) malloc (sizeof(ElmtUnitList));
-	if (U != Nil) {
-		InfoUnit(U) = X;
-		NextUnit(U) = Nil;
-	}
-
-	return U;
-}
-
-void DealokUnit(addressUnit U) 
-{
-	free(U);
 }
 
 int NbElmtListUnit(Player P)
@@ -150,47 +135,30 @@ addressUnit TraversalElmtUnitList (Player P, int i)
 /* Elemen ke-i ada di ListUnit */
 
 
-addressPoint AlokVillage(POINT P)
-{
-	addressPoint V;
-
-	V = (addressPoint) malloc (sizeof(ElmtVillageList));
-	if (V != Nil) {
-		InfoVillage(V) = P;
-		NextVillage(V) = Nil;
-	}
-
-	return V;
-}
-/* Alokasi unit Village pada POINT P */
-void DealokVillage(addressPoint V)
-{
-	free(V);
-}
-/* Dealokasi addressPoint V */
 boolean IsEmptyVillage(Player P)
 {
-	return (FirstVillage(ListVillage(P)) == Nil);
+	return (IsEmptyVillageList(ListVillage(P)));
 }
 /* Mengirimkan True jika Player P tidak memiliki Village apapun */
 
 void AddVillage(Player *PL, POINT P)
 {
-	addressPoint V = AlokVillage(P);
-	NextVillage(V) = FirstVillage(ListVillage(*PL));
-	FirstVillage(ListVillage(*PL)) = V;
+	InsertFirstVillage(&ListVillage(*PL), P);
 }
 
 void DelVillage(Player *PL, POINT *P)
 {
+	/* KAMUS LOKAL*/
 	addressPoint AddrV,PrecAddrV,temp;
 	boolean bFound = false;
+	
+	/* ALGORITMA */
 	if (!IsEmptyVillage(*PL)) {
 		AddrV = FirstVillage(ListVillage(*PL));
 		PrecAddrV = Nil;
 		if ((NextVillage(AddrV) != Nil) && (&InfoVillage(AddrV) != P)) { //jika P tidak di elemen pertama
 			while ((AddrV != Nil) && (!bFound)) {
-				if (&InfoVillage(AddrV) == P) {
+				if (EQ(InfoVillage(AddrV), *P)) {
 					bFound = true;
 				} else {
 					PrecAddrV = AddrV;
@@ -202,7 +170,7 @@ void DelVillage(Player *PL, POINT *P)
 				DealokVillage(AddrV);
 			}
 		} else {
-			if (&InfoVillage(AddrV) == P) {  // jika P ditemukan di elemen pertama
+			if (EQ(InfoVillage(AddrV), *P)) {  // jika P ditemukan di elemen pertama
 				temp = FirstVillage(ListVillage(*PL));
 				FirstVillage(ListVillage(*PL)) = NextVillage(temp);
 				DealokVillage(temp);
