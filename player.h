@@ -12,7 +12,7 @@
 #define Nil NULL
 #define InitGold 150
 #define IncomePerVillage 25
-#define UpkeepPerUnit 3
+#define UpkeepPerUnit 7
 
 typedef struct tPlayer{
 	int PlayerNo;
