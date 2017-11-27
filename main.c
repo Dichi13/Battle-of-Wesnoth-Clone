@@ -34,21 +34,20 @@ void Save()
 	time_t now;
     struct tm *tm;
 
-    now = time(0);
-	
 	/* ALGORITMA */	
 	printf("Masukan nama file : ");
 	scanf(" %s", filename);
 	
 	f = fopen(filename, "w");
 	
-	tm = localtime (&now);
+	/* Waktu Save */
+	now = time(0);
+    tm = localtime (&now);
 	J = MakeJAM(tm->tm_hour, tm->tm_min, tm->tm_sec);
-	printf("File di save pada ");
+	printf("File di-save pada ");
 	TulisJAM(J);
-	printf("\n");
+	printf(".\n");
 	
-	/* JAM penge-save-an */
 	fprintf(f, "%02d:%02d:%02d \n", Hour(J), Minute(J), Second(J));
 	
 	/* State MAP */
@@ -126,13 +125,14 @@ void Load()
 	
 	STARTKATA(filename);
 	
-	Hour(J) = (CKata.TabKata[1] - '0')*10 + CKata.TabKata[2] - '0';
-	Minute(J) = (CKata.TabKata[4] - '0')*10 + CKata.TabKata[5] - '0';
-	Second(J) = (CKata.TabKata[7] - '0')*10 + CKata.TabKata[8] - '0';
+	/* Waktu Save */
 	
-	printf("\nFile yang di-save pada ");
+	Hour(J) = (CKata.TabKata[1] - '0')*10 + (CKata.TabKata[2] - '0');
+	Minute(J) = (CKata.TabKata[4] - '0')*10 + (CKata.TabKata[5] - '0');
+	Second(J) = (CKata.TabKata[7] - '0')*10 + (CKata.TabKata[8] - '0');
+	printf("File yang di-save pada ");
 	TulisJAM(J);
-	printf(" berhasil di-load \n\n");
+	printf(" berhasil di-load\n\n");
 	
 	ADVKATA();
 	ADVKATA();
@@ -453,7 +453,7 @@ int main(int argc, char **argv)
 	}
 	
 	printf("\nThanks for playing the game!\n");
-	printf("Please play again!\n\n");
+	printf("Please play again!\n");
 		
 	
 	return 0;
